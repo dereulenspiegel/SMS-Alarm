@@ -1,0 +1,219 @@
+package de.akuz.android.smsalarm.data;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+
+import de.akuz.android.smsalarm.util.Log;
+import de.akuz.android.smsalarm.util.NumberUtils;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+
+/**
+ * This class stores definitions for alarm groups.
+ * @author Till Klocke
+ *
+ */
+public class AlarmDataAdapter {
+	
+	private final static String DB_NAME="alarms";
+	private final static int DB_VERSION=1;
+	
+	/**
+	 * Table and column names for the table which stores the alarmgroups
+	 */	
+	final static String ALARM_TABLE_NAME="alarmgroups";
+	final static String ALARM_ID="_id";
+	final static String ALARM_NAME="name";
+	final static String ALARM_RINGTONE="ringtone";
+	final static String ALARM_VIBRATE="vibrate";
+	final static String ALARM_LED="led";	
+	final static String ALARM_KEYWORD="keyword";
+	final static String ALARM_CREATE_STATEMENT=
+		"create table "+ALARM_TABLE_NAME+" ("+
+		ALARM_ID+" integer primary key autoincrement,"+
+		ALARM_NAME+" text not null,"+
+		ALARM_RINGTONE+" text,"+
+		ALARM_VIBRATE+" boolean,"+
+		ALARM_KEYWORD+" text not null,"+
+		ALARM_LED+" integer);";
+	
+	/**
+	 * Table and column names for the tables which stores the allowed numbers
+	 */
+	final static String NUMBER_TABLE_NAME="numbers";
+	final static String NUMBER_ID="_id";
+	final static String NUMBER_ALARM_ID="alarm_id";
+	final static String NUMBER_NUMBER_STRING="number";
+	final static String NUMBER_CREATE_STATEMENT=
+		"create table "+NUMBER_TABLE_NAME+" ("+
+		NUMBER_ID+" integer primary key autoincrement,"+
+		NUMBER_ALARM_ID+" integer not null,"+
+		NUMBER_NUMBER_STRING+" text not null);";
+	
+	/**
+	 * DBHelper class
+	 * @author Till Klocke
+	 *
+	 */
+	private static class DBHelper extends SQLiteOpenHelper{
+			
+		public DBHelper(Context context){
+			super(context,DB_NAME,null,DB_VERSION);
+		}
+		
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public void onCreate(SQLiteDatabase db) {
+			Log.debug("VCardAdapter","Creating table with statement:"+ALARM_CREATE_STATEMENT);
+			db.execSQL(ALARM_CREATE_STATEMENT);
+			db.execSQL(NUMBER_CREATE_STATEMENT);
+			Log.debug("VCardAdapter","Database created");
+		}
+		
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			//TODO: implement more intelligent upgrade mechanism
+			Log.debug("VCardAdapter","Updating database, deleting old content...");
+			db.execSQL("DROP TABLE IF EXISTS "+ALARM_TABLE_NAME);
+			db.execSQL("DROP TABLE IF EXISTS "+NUMBER_TABLE_NAME);
+			onCreate(db);
+		}
+	}
+	
+	private DBHelper dbHelper;
+	private SQLiteDatabase db;
+	private Context mContext;
+	
+	/**
+	 * A Map which contains all AlarmGroup objects create by this instance of
+	 * AlarmDataAdapter to keep track of all objects and to be used for caching
+	 */
+	private HashMap<Integer,AlarmGroup> alarmGroupObjects =
+		new HashMap<Integer,AlarmGroup>();
+	
+	/**
+	 * Keeps track of all instances since we want only one instance per
+	 * context
+	 */
+	private static HashMap<Context,AlarmDataAdapter> instances =
+		new HashMap<Context,AlarmDataAdapter>();
+	
+	/**
+	 * private constructor so only the getInstance method can create new instances
+	 * @param context
+	 */
+	private AlarmDataAdapter(Context context){
+		dbHelper = new DBHelper(context);
+		this.mContext = context;
+	}
+	
+	/**
+	 * This method returns an appropriate instance of AlarmDataAdpater for the given
+	 * context
+	 * @param context given Context
+	 * @return a instance of AlarmDataAdapter
+	 */
+	public static AlarmDataAdapter getInstance(Context context){
+		if(instances.containsKey(context)){
+			return instances.get(context);
+		} else {
+			AlarmDataAdapter temp = new AlarmDataAdapter(context);
+			instances.put(context, temp);
+			return temp;
+		}
+	}
+	
+	/**
+	 * Opens the Database in writeable mode
+	 */
+	public void open(){
+		db = dbHelper.getWritableDatabase();
+	}
+	
+	/**
+	 * This closes the database, but only if there aren't any AlarmGroup objects still
+	 * open. It also removes this instance from the instances map.
+	 */
+	public void close(){
+		if(alarmGroupObjects.size()==0){
+			dbHelper.close();
+			//Remove this instance from instances map
+			instances.remove(mContext);
+		}
+		//TODO: probably throw an exception or so
+	}
+	
+	/**
+	 * returns the used SQLiteDatabase object so AlarmGroup objects can access it
+	 * @return
+	 */
+	SQLiteDatabase getDatabase(){
+		return db;
+	}
+	
+	/**
+	 * This method closes all generated AlarmGroup objects. So should be used with caution.
+	 */
+	public void closeAllChilds(){
+		for(AlarmGroup a : alarmGroupObjects.values()){
+			a.close();
+		}
+	}
+	
+	/**
+	 * This method returns all alarm groups which are responsible for a cerain number
+	 * @param number The number of the sender
+	 * @return an unmodifiable List of AlarmGroups
+	 */
+	public List<AlarmGroup> getAlarmGroupByNumber(String number){
+		String temp = new String(number);
+		temp = NumberUtils.convertNumberToInternationalFormat(temp);
+		Cursor mCursor = db.query(
+				NUMBER_TABLE_NAME, 
+				new String[]{NUMBER_ALARM_ID}, NUMBER_NUMBER_STRING+"=?", 
+				new String[]{number}, null, null, null);
+		List<AlarmGroup> tempList = new ArrayList<AlarmGroup>();
+		mCursor.moveToFirst();
+		int numberAlarmId = mCursor.getColumnIndex(NUMBER_ALARM_ID);
+		while(mCursor.moveToNext()){
+			tempList.add(new AlarmGroup(this,mCursor.getInt(numberAlarmId)));
+		}
+		return Collections.unmodifiableList(tempList);
+	}
+	
+	/**
+	 * Returns the first (and hopefully only) AlarmGroup object matching a certain number
+	 * and a certain keyword.
+	 * @param number
+	 * @param keyword
+	 * @return
+	 */
+	public AlarmGroup getAlarmGroupByNumberAndKeyword(String number, String keyword){
+		List<AlarmGroup> alarmGroups = getAlarmGroupByNumber(number);
+		for(AlarmGroup g : alarmGroups){
+			if(g.getKeyword().equals(keyword)){
+				return g;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * This method allows child AlarmGroup objects to remove their self from the 
+	 * alarmGroupObjects map
+	 * @param id The id of the AlarmGroup
+	 */
+	void closeAlarmGroup(int id){
+		alarmGroupObjects.remove(id);
+	}
+
+}
