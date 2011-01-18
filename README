@@ -1,0 +1,12 @@
+Hier sollen Anwendungen zur SMS-Alarmierung gesammelt werden. Diese Anwendungen 
+sollen es ermöglichen auf Endgeräten
+Alarme per SMS auszulösen, unabhängig von der normalen SMS Notifizierung und 
+auch deutlich von dieser unterscheidbar. Bisher existieren lediglich die Anfänge
+einer App für Android. Ich suche noch Leute die das auch gerne für andere Plattformen
+umsetzen würden.
+
+Android ToDo:
+-Activity zur Konfiguration von Alarmgruppen
+-Alarmactivity muss Einstellungen für die Alarmierungen lesen und umsetzen
+-Lautstärke einstellen, damit Alarme nicht versehentlich leise gestellt werden können.
+-Rücktaste etc. abfangen damit Alarme nicht so einfach beendet werden können.
