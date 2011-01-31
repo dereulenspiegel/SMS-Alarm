@@ -98,16 +98,26 @@ public class AlarmActivity extends Activity {
 		continueNotification = false;
 		am.setStreamVolume(AudioManager.STREAM_NOTIFICATION, oldNotificationVolume, 0);
 	}
-
+	
+	/**
+	 * This activity is singleTop so we have to handle new intents
+	 */
 	@Override
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		callingIntent = intent;
 	}
-
+	
+	/**
+	 * In case of a notifcation we have to make sure that the user isn't able to cancel
+	 * the notification by accident
+	 */
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if(continueNotification && (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_HOME)){
+		//If we are notificating the user of an alarm, it should only be possible to leave
+		//this activity by acknowledging the alarm correctly
+		if(continueNotification && (keyCode == KeyEvent.KEYCODE_BACK 
+				|| keyCode == KeyEvent.KEYCODE_HOME)){
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
