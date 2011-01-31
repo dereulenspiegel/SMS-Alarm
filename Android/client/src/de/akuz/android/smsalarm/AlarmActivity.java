@@ -107,13 +107,10 @@ public class AlarmActivity extends Activity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if(!continueNotification){
-			return super.onKeyDown(keyCode, event);
-		}
-		if(keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_HOME){
+		if(continueNotification && (keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_HOME)){
 			return true;
 		}
-		return false;
+		return super.onKeyDown(keyCode, event);
 	}
 
 }
