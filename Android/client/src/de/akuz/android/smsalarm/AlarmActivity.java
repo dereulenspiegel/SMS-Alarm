@@ -28,10 +28,17 @@ public class AlarmActivity extends Activity {
 		//TODO: Refresh intent
 		Alarm[] alarms = 
 			(Alarm[]) callingIntent.getParcelableArrayExtra(Alarm.PARCELABLE_KEYWORD);
+		alarmListAdapter.clear();
 		for(int i=0;i<alarms.length;i++){
 			alarmListAdapter.add(alarms[i]);
 		}
 		//TODO: Sound the alarm
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+		callingIntent = intent;
 	}
 
 }
