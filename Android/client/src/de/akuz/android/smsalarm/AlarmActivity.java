@@ -10,6 +10,7 @@ import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.widget.ListView;
 
 public class AlarmActivity extends Activity {
@@ -102,6 +103,17 @@ public class AlarmActivity extends Activity {
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		callingIntent = intent;
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if(!continueNotification){
+			return super.onKeyDown(keyCode, event);
+		}
+		if(keyCode == KeyEvent.KEYCODE_BACK || keyCode == KeyEvent.KEYCODE_HOME){
+			return true;
+		}
+		return false;
 	}
 
 }
