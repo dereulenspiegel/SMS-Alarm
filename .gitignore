@@ -2,3 +2,4 @@ Android/client/bin
 Android/client/gen
 *.class
 *.dex
+local.properties
