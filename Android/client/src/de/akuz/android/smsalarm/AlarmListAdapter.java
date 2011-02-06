@@ -1,12 +1,9 @@
 package de.akuz.android.smsalarm;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import de.akuz.android.smsalarm.data.Alarm;
 import android.content.Context;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;

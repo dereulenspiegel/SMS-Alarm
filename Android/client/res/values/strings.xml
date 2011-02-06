@@ -2,4 +2,10 @@
 <resources>
     <string name="hello">Hello World, OverviewActivity!</string>
     <string name="app_name">SMS Alarm</string>
+    <string name="add_alarm_group">Alarmgruppe hinzufügen</string>
+    <string name="alarm_group_name">Name</string>
+    <string name="alarm_keyword_">Alarmwort</string>
+    <string name="allowed_numbers">Erlaubte Absendernummer(n)</string>
+    <string name="how_to_acknowledge_alarm">Zum Quittieren des Alarms die Menütaste betätigen und &quot;Alarm quittieren&quot; auswählen</string>
+    <string name="acknowlegde_alarm">Alarm quittieren</string>
 </resources>

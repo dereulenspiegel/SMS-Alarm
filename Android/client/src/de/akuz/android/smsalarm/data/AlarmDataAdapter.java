@@ -7,8 +7,10 @@ import java.util.List;
 
 import de.akuz.android.smsalarm.util.Log;
 import de.akuz.android.smsalarm.util.NumberUtils;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -18,6 +20,8 @@ import android.database.sqlite.SQLiteOpenHelper;
  *
  */
 public class AlarmDataAdapter {
+	
+	private final static String TAG = "AlarmDataAdapter";
 	
 	private final static String DB_NAME="alarms";
 	private final static int DB_VERSION=1;
@@ -38,7 +42,7 @@ public class AlarmDataAdapter {
 		ALARM_NAME+" text not null,"+
 		ALARM_RINGTONE+" text,"+
 		ALARM_VIBRATE+" boolean,"+
-		ALARM_KEYWORD+" text not null,"+
+		ALARM_KEYWORD+" text unique not null,"+
 		ALARM_LED+" integer);";
 	
 	/**
@@ -70,10 +74,10 @@ public class AlarmDataAdapter {
 		 */
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			Log.debug("VCardAdapter","Creating table with statement:"+ALARM_CREATE_STATEMENT);
+			Log.debug(TAG,"Creating table with statement:"+ALARM_CREATE_STATEMENT);
 			db.execSQL(ALARM_CREATE_STATEMENT);
 			db.execSQL(NUMBER_CREATE_STATEMENT);
-			Log.debug("VCardAdapter","Database created");
+			Log.debug(TAG,"Database created");
 		}
 		
 		/**
@@ -82,7 +86,7 @@ public class AlarmDataAdapter {
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			//TODO: implement more intelligent upgrade mechanism
-			Log.debug("VCardAdapter","Updating database, deleting old content...");
+			Log.debug(TAG,"Updating database, deleting old content...");
 			db.execSQL("DROP TABLE IF EXISTS "+ALARM_TABLE_NAME);
 			db.execSQL("DROP TABLE IF EXISTS "+NUMBER_TABLE_NAME);
 			onCreate(db);
@@ -97,8 +101,8 @@ public class AlarmDataAdapter {
 	 * A Map which contains all AlarmGroup objects create by this instance of
 	 * AlarmDataAdapter to keep track of all objects and to be used for caching
 	 */
-	private HashMap<Integer,AlarmGroup> alarmGroupObjects =
-		new HashMap<Integer,AlarmGroup>();
+	private HashMap<Long,AlarmGroup> alarmGroupObjects =
+		new HashMap<Long,AlarmGroup>();
 	
 	/**
 	 * Keeps track of all instances since we want only one instance per
@@ -170,7 +174,7 @@ public class AlarmDataAdapter {
 	}
 	
 	/**
-	 * This method returns all alarm groups which are responsible for a cerain number
+	 * This method returns all alarm groups which are responsible for a certain number
 	 * @param number The number of the sender
 	 * @return an unmodifiable List of AlarmGroups
 	 */
@@ -184,8 +188,28 @@ public class AlarmDataAdapter {
 		List<AlarmGroup> tempList = new ArrayList<AlarmGroup>();
 		mCursor.moveToFirst();
 		int numberAlarmId = mCursor.getColumnIndex(NUMBER_ALARM_ID);
-		while(mCursor.moveToNext()){
-			tempList.add(new AlarmGroup(this,mCursor.getInt(numberAlarmId)));
+		if(mCursor.getCount()>0){
+			do {
+				tempList.add(new AlarmGroup(this,mCursor.getInt(numberAlarmId)));
+			} while(mCursor.moveToNext());
+		}
+		return Collections.unmodifiableList(tempList);
+	}
+	
+	public List<AlarmGroup> getAllAlarmGroups(){
+		Log.debug(TAG, "A List with all messages is requested");
+		Cursor mCursor = db.query(
+				ALARM_TABLE_NAME, 
+				new String[]{ALARM_ID}, null, 
+				null, null, null, null);
+		Log.debug(TAG, "The cursor has "+mCursor.getCount()+" rows");
+		List<AlarmGroup> tempList = new ArrayList<AlarmGroup>();
+		mCursor.moveToFirst();
+		int numberAlarmId = mCursor.getColumnIndex(ALARM_ID);
+		if(mCursor.getCount()>0){
+			do {
+				tempList.add(new AlarmGroup(this,mCursor.getInt(numberAlarmId)));
+			}while(mCursor.moveToNext());
 		}
 		return Collections.unmodifiableList(tempList);
 	}
@@ -212,8 +236,44 @@ public class AlarmDataAdapter {
 	 * alarmGroupObjects map
 	 * @param id The id of the AlarmGroup
 	 */
-	void closeAlarmGroup(int id){
+	void closeAlarmGroup(long id){
 		alarmGroupObjects.remove(id);
+	}
+	
+	/**
+	 * Creates a new AlarmGroup with the given name and keyword
+	 * @param name A desciptional name for the new AlarmGroup
+	 * @param keyword The Keyword for this AlarmGroup
+	 * @return the created AlarmGroup
+	 */
+	public AlarmGroup createNewAlarmGroup(String name, String keyword) throws SQLException{
+		Log.debug(TAG, "Creating new AlarmGroup with name "+name);
+		ContentValues values = new ContentValues();
+		values.put(ALARM_KEYWORD, keyword);
+		values.put(ALARM_NAME, name);
+
+		long id = db.insertOrThrow(ALARM_TABLE_NAME, null, values);
+		Log.debug(TAG, "The new AlarmGroup has the ID "+id);
+		AlarmGroup group = new AlarmGroup(this,id);
+		return group;
+	}
+	
+	/**
+	 * Deletes an AlarmGroup with the given id
+	 * @param id the id of the AlarmGroup which sould be deleted
+	 */
+	public void removeAlarmGroup(long id){
+		String[] args = {String.valueOf(id)};
+		db.delete(ALARM_TABLE_NAME, ALARM_ID+"=?", args);
+		db.delete(NUMBER_TABLE_NAME, NUMBER_ALARM_ID+"=?", args);
+	}
+	
+	/**
+	 * Deletes the whole database. Normally just for tests, so use with caution!
+	 */
+	public void clear(){
+		db.delete(ALARM_TABLE_NAME, null, null);
+		db.delete(NUMBER_TABLE_NAME, null, null);
 	}
 
 }
