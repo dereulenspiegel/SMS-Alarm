@@ -9,5 +9,6 @@
     <uses-library android:name="android.test.runner" />
     </application>
 
-    <instrumentation android:targetPackage="de.akuz.android.smsalarm" android:name="android.test.InstrumentationTestRunner" />
+    <!--  <instrumentation android:targetPackage="de.akuz.android.smsalarm" android:name="android.test.InstrumentationTestRunner" /> -->
+    <uses-sdk android:minSdkVersion="4" android:maxSdkVersion="9" android:targetSdkVersion="4"></uses-sdk>
 </manifest> 
