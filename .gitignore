@@ -3,3 +3,7 @@ Android/client/gen
 *.class
 *.dex
 local.properties
+Android/test/bin
+Android/test/gen
+*.apk
+*.ap_
