@@ -92,14 +92,17 @@
 	</target>
 	
 	<target name="cpd">
+		<echo>Setting up CPD Task</echo>
 		<taskdef name="cpd" classname="net.sourceforge.pmd.cpd.CPDTask" >
 			<classpath refid="pmd.path" />
 		</taskdef>
-		<cpd minimumTokenCount="10" outputFile="Android/cpd.xml" format="xml">
+		<echo>Starting CPD and generating report</echo>
+		<cpd minimumTokenCount="10" outputFile="../cpd.xml" format="xml">
 			<fileset dir="../client/src/">
 				<include name="**/*.java"/>
 			</fileset>
 		</cpd>
+		<echo>CPD Task finished</echo>
 	</target>
 
 </project>
