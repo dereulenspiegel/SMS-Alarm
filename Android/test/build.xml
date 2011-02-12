@@ -96,7 +96,7 @@
 			<classpath refid="pmd.path" />
 		</taskdef>
 		<cpd minimumTokenCount="100" outputFile="Android/cpd.xml">
-			<fileset dir="Android/client/src/">
+			<fileset dir="../client/src/">
 				<include name="**/*.java"/>
 			</fileset>
 		</cpd>
