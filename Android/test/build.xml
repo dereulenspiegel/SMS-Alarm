@@ -97,7 +97,7 @@
 			<classpath refid="pmd.path" />
 		</taskdef>
 		<echo>Starting CPD and generating report</echo>
-		<cpd minimumTokenCount="10" outputFile="../cpd.xml" format="xml">
+		<cpd minimumTokenCount="50" outputFile="../cpd.xml" format="xml">
 			<fileset dir="../client/src/">
 				<include name="**/*.java"/>
 			</fileset>
