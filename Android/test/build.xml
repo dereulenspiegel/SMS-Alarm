@@ -81,7 +81,7 @@
     -->
     <setup />
 	
-	<property name="pmd.home" value="Android/test/libs" />
+	<property name="pmd.home" value="libs" />
 	<path id="pmd.path">
 		<fileset dir="${pmd.home}">
 			<include name="**/*.jar" />
