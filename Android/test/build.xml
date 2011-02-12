@@ -92,10 +92,10 @@
 	</target>
 	
 	<target name="cpd">
-		<taskdef name="cpd" format="xml" classname="net.sourceforge.pmd.cpd.CPDTask" >
+		<taskdef name="cpd" classname="net.sourceforge.pmd.cpd.CPDTask" >
 			<classpath refid="pmd.path" />
 		</taskdef>
-		<cpd minimumTokenCount="10" outputFile="Android/cpd.xml">
+		<cpd minimumTokenCount="10" outputFile="Android/cpd.xml" format="xml">
 			<fileset dir="../client/src/">
 				<include name="**/*.java"/>
 			</fileset>
