@@ -80,5 +80,26 @@
              - customize to your needs.
     -->
     <setup />
+	
+	<property name="pmd.home" value="Android/test/libs" />
+	<path id="pmd.path">
+		<fileset dir="${pmd.home}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	
+	<target name="help">
+	</target>
+	
+	<target name="cpd">
+		<taskdef name="cpd" format="xml" classname="net.sourceforge.pmd.cpd.CPDTask" >
+			<classpath refid="pmd.path" />
+		</taskdef>
+		<cpd minimumTokenCount="100" outputFile="Android/cpd.txt">
+			<fileset dir="Android/client/src/">
+				<include name="**/*.java"/>
+			</fileset>
+		</cpd>
+	</target>
 
 </project>
