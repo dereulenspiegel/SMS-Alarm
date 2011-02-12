@@ -184,15 +184,27 @@ public class AlarmDataAdapter {
 		Cursor mCursor = db.query(
 				NUMBER_TABLE_NAME, 
 				new String[]{NUMBER_ALARM_ID}, NUMBER_NUMBER_STRING+"=?", 
-				new String[]{number}, null, null, null);
+				new String[]{number}, 
+				NUMBER_ALARM_ID, 
+				null, 
+				null);
 		List<AlarmGroup> tempList = new ArrayList<AlarmGroup>();
 		mCursor.moveToFirst();
 		int numberAlarmId = mCursor.getColumnIndex(NUMBER_ALARM_ID);
 		if(mCursor.getCount()>0){
 			do {
-				tempList.add(new AlarmGroup(this,mCursor.getInt(numberAlarmId)));
+				long id = mCursor.getLong(numberAlarmId);
+				if(alarmGroupObjects.containsKey(id)){
+					tempList.add(alarmGroupObjects.get(id));
+				} else {
+					AlarmGroup tempGroup = 
+						new AlarmGroup(this,mCursor.getInt(numberAlarmId));
+					tempList.add(tempGroup);
+					alarmGroupObjects.put(id, tempGroup);
+				}
 			} while(mCursor.moveToNext());
 		}
+		mCursor.close();
 		return Collections.unmodifiableList(tempList);
 	}
 	
@@ -210,6 +222,7 @@ public class AlarmDataAdapter {
 				null);
 		if(mCursor.getCount()>0){
 			retVal = new AlarmGroup(this,id);
+			alarmGroupObjects.put(id, retVal);
 		}
 		mCursor.close();
 		return retVal;
@@ -231,9 +244,17 @@ public class AlarmDataAdapter {
 		int numberAlarmId = mCursor.getColumnIndex(ALARM_ID);
 		if(mCursor.getCount()>0){
 			do {
-				tempList.add(new AlarmGroup(this,mCursor.getInt(numberAlarmId)));
+				long id = mCursor.getLong(numberAlarmId);
+				if(alarmGroupObjects.containsKey(id)){
+					tempList.add(alarmGroupObjects.get(id));
+				} else {
+					AlarmGroup tempGroup = new AlarmGroup(this,id);
+					tempList.add(tempGroup);
+					alarmGroupObjects.put(id, tempGroup);
+				}
 			}while(mCursor.moveToNext());
 		}
+		mCursor.close();
 		return Collections.unmodifiableList(tempList);
 	}
 	
@@ -278,6 +299,7 @@ public class AlarmDataAdapter {
 		long id = db.insertOrThrow(ALARM_TABLE_NAME, null, values);
 		Log.debug(TAG, "The new AlarmGroup has the ID "+id);
 		AlarmGroup group = new AlarmGroup(this,id);
+		alarmGroupObjects.put(id, group);
 		return group;
 	}
 	
@@ -287,6 +309,7 @@ public class AlarmDataAdapter {
 	 */
 	public void removeAlarmGroup(long id){
 		String[] args = {String.valueOf(id)};
+		alarmGroupObjects.remove(id);
 		db.delete(ALARM_TABLE_NAME, ALARM_ID+"=?", args);
 		db.delete(NUMBER_TABLE_NAME, NUMBER_ALARM_ID+"=?", args);
 	}
