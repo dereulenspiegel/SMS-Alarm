@@ -40,7 +40,10 @@ public class ConfigureAlarmActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		if(this.getIntent().getLongExtra(AlarmGroup.EXTRA_ALARM_GROUP_ID, -1)>-1){
-			
+			currentGroup = 
+				alarmAdapter.getAlarmGroupById(
+						this.getIntent().getLongExtra(
+								AlarmGroup.EXTRA_ALARM_GROUP_ID, -1));
 		}
 	}
 
