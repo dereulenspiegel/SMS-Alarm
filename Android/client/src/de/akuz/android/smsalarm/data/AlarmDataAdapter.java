@@ -196,6 +196,29 @@ public class AlarmDataAdapter {
 		return Collections.unmodifiableList(tempList);
 	}
 	
+	public AlarmGroup getAlarmGroupById(long id){
+		AlarmGroup retVal = null;
+		if(alarmGroupObjects.containsKey(id)){
+			return alarmGroupObjects.get(id);
+		}
+		Cursor mCursor = db.query(ALARM_TABLE_NAME, 
+				new String[]{ALARM_ID}, 
+				ALARM_ID+"=?", 
+				new String[]{ALARM_ID}, 
+				null, 
+				null, 
+				null);
+		if(mCursor.getCount()>0){
+			retVal = new AlarmGroup(this,id);
+		}
+		mCursor.close();
+		return retVal;
+	}
+	
+	/**
+	 * Return all AlarmGroups.
+	 * @return
+	 */
 	public List<AlarmGroup> getAllAlarmGroups(){
 		Log.debug(TAG, "A List with all messages is requested");
 		Cursor mCursor = db.query(

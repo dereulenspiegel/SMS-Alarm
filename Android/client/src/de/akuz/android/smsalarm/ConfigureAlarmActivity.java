@@ -15,6 +15,7 @@ public class ConfigureAlarmActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.configure_activity);
+		alarmAdapter = AlarmDataAdapter.getInstance(this);
 	}
 
 	@Override
@@ -37,8 +38,10 @@ public class ConfigureAlarmActivity extends Activity {
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
 		super.onResume();
+		if(this.getIntent().getLongExtra(AlarmGroup.EXTRA_ALARM_GROUP_ID, -1)>-1){
+			
+		}
 	}
 
 }
