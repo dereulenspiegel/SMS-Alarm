@@ -53,7 +53,10 @@ public class SMSReceiver extends BroadcastReceiver {
 		//close the adapter and all its child to free resources
 		adapter.closeAllChilds();
 		adapter.close();
-		sendAlarm(alarms);
+		if(alarms.size()>0){
+			sendAlarm(alarms);
+			this.setResultData(null);
+		}
 	}
 	
 	/**
