@@ -14,6 +14,8 @@ import android.database.sqlite.SQLiteDatabase;
  */
 public class AlarmGroup {
 	
+	public final static String EXTRA_ALARM_GROUP_ID="de.akuz.android.smsalarm.alarmgroupid";
+	
 	private long id;
 	private SQLiteDatabase db;
 	private AlarmDataAdapter parent;
