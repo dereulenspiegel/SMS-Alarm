@@ -183,12 +183,14 @@ public class AlarmDataAdapter {
 		if(NumberUtils.isValidMobileNumber(number)){
 			temp = NumberUtils.convertNumberToInternationalFormat(temp);
 		}
-		Cursor mCursor = db.query(
+		//Use query this distinct = ture
+		Cursor mCursor = db.query(true,
 				NUMBER_TABLE_NAME, 
 				new String[]{NUMBER_ALARM_ID}, NUMBER_NUMBER_STRING+"=?", 
-				new String[]{number}, 
-				NUMBER_ALARM_ID, 
+				new String[]{temp}, 
 				null, 
+				null, 
+				null,
 				null);
 		int numberAlarmId = mCursor.getColumnIndex(NUMBER_ALARM_ID);
 		List<AlarmGroup> tempList = getGroupsFromCursor(mCursor,numberAlarmId);
