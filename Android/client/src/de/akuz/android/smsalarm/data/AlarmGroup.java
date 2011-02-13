@@ -1,6 +1,7 @@
 package de.akuz.android.smsalarm.data;
 
 
+import de.akuz.android.smsalarm.util.Log;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -13,6 +14,8 @@ import android.database.sqlite.SQLiteDatabase;
  *
  */
 public class AlarmGroup {
+	
+	private final static String TAG="AlarmGroup";
 	
 	public final static String EXTRA_ALARM_GROUP_ID="de.akuz.android.smsalarm.alarmgroupid";
 	
@@ -174,10 +177,12 @@ public class AlarmGroup {
 	 * @param number the new allowed sender of alarm sms for this AlarmGroup
 	 */
 	public void addAllowedNumber(String number){
+		Log.debug(TAG,"Inserting new allowed number "+number);
 		ContentValues values = new ContentValues();
 		values.put(AlarmDataAdapter.NUMBER_ALARM_ID, id);
 		values.put(AlarmDataAdapter.NUMBER_NUMBER_STRING, number);
-		db.insert(AlarmDataAdapter.NUMBER_TABLE_NAME, null, values);
+		long row = db.insertOrThrow(AlarmDataAdapter.NUMBER_TABLE_NAME, null, values);
+		Log.debug(TAG, "The new allowed number has the row id "+row);
 	}
 	
 	/**
