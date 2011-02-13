@@ -178,12 +178,14 @@ public class AlarmDataAdapter {
 	 * @param number The number of the sender
 	 * @return an unmodifiable List of AlarmGroups
 	 */
-	public List<AlarmGroup> getAlarmGroupByNumber(String number){
+	public List<AlarmGroup> getAlarmGroupsByNumber(String number){
 		String temp = new String(number);
 		if(NumberUtils.isValidMobileNumber(number)){
+			Log.debug(TAG, "Sender seems to be a valid, mobile number, comverting to international format");
 			temp = NumberUtils.convertNumberToInternationalFormat(temp);
 		}
 		//Use query this distinct = ture
+		Log.debug(TAG,"Querying for sender "+temp);
 		Cursor mCursor = db.query(true,
 				NUMBER_TABLE_NAME, 
 				new String[]{NUMBER_ALARM_ID}, NUMBER_NUMBER_STRING+"=?", 
@@ -192,9 +194,11 @@ public class AlarmDataAdapter {
 				null, 
 				null,
 				null);
+		Log.debug(TAG, "Cursor has "+mCursor.getCount()+" results");
 		int numberAlarmId = mCursor.getColumnIndex(NUMBER_ALARM_ID);
 		List<AlarmGroup> tempList = getGroupsFromCursor(mCursor,numberAlarmId);
 		mCursor.close();
+		Log.debug(TAG, "Returning unmodifiable List");
 		return Collections.unmodifiableList(tempList);
 	}
 	
@@ -264,12 +268,16 @@ public class AlarmDataAdapter {
 	 * @return
 	 */
 	public AlarmGroup getAlarmGroupByNumberAndKeyword(String number, String keyword){
-		List<AlarmGroup> alarmGroups = getAlarmGroupByNumber(number);
+		Log.debug(TAG,"Getting all AlarmGroups for sender "+number);
+		List<AlarmGroup> alarmGroups = getAlarmGroupsByNumber(number);
+		Log.debug(TAG,"Got "+alarmGroups.size()+" groups");
 		for(AlarmGroup g : alarmGroups){
 			if(g.getKeyword().equals(keyword)){
+				Log.debug(TAG, "Returning an AlarmGroup");
 				return g;
 			}
 		}
+		Log.warning(TAG, "Didn't found any matching AlarmGroup");
 		return null;
 	}
 	
