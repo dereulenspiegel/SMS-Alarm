@@ -48,7 +48,7 @@ public class NumberUtils {
 	}
 	
 	/**
-	 * This method converst a given phone number into international format, starting with
+	 * This method converts a given phone number into international format, starting with
 	 * a plus.
 	 * @param number the given phone number
 	 * @return the converted phone number

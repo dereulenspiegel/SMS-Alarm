@@ -188,7 +188,8 @@ public class AlarmDataAdapter {
 		Log.debug(TAG,"Querying for sender "+temp);
 		Cursor mCursor = db.query(true,
 				NUMBER_TABLE_NAME, 
-				new String[]{NUMBER_ALARM_ID}, NUMBER_NUMBER_STRING+"=?", 
+				new String[]{NUMBER_ALARM_ID,NUMBER_NUMBER_STRING}, 
+				NUMBER_NUMBER_STRING+"=?", 
 				new String[]{temp}, 
 				null, 
 				null, 
