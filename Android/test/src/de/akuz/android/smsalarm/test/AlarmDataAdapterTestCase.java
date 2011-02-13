@@ -40,7 +40,7 @@ public class AlarmDataAdapterTestCase extends AndroidTestCase {
 	public void testCreatingNewAlarmGroup() throws Exception {
 		AlarmGroup group = testAdapter.createNewAlarmGroup(TEST_NAME, TEST_KEYWORD);
 		group.addAllowedNumber(TEST_SENDER);
-		Assert.assertEquals(testAdapter.getAllAlarmGroups().size(), 1);
+		Assert.assertEquals(1,testAdapter.getAllAlarmGroups().size());
 	}
 	
 	public void testRetrieveGroupByNumberAndKeyword() throws Exception {
