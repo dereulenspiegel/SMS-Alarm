@@ -247,7 +247,7 @@ public class AlarmDataAdapter {
 	 * @return
 	 */
 	public List<AlarmGroup> getAllAlarmGroups(){
-		Log.debug(TAG, "A List with all messages is requested");
+		Log.debug(TAG, "A List with all AlarmGroups is requested");
 		Cursor mCursor = db.query(
 				ALARM_TABLE_NAME, 
 				new String[]{ALARM_ID}, null, 
