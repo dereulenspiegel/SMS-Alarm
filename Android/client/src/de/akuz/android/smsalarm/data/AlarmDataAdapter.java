@@ -180,7 +180,9 @@ public class AlarmDataAdapter {
 	 */
 	public List<AlarmGroup> getAlarmGroupByNumber(String number){
 		String temp = new String(number);
-		temp = NumberUtils.convertNumberToInternationalFormat(temp);
+		if(NumberUtils.isValidMobileNumber(number)){
+			temp = NumberUtils.convertNumberToInternationalFormat(temp);
+		}
 		Cursor mCursor = db.query(
 				NUMBER_TABLE_NAME, 
 				new String[]{NUMBER_ALARM_ID}, NUMBER_NUMBER_STRING+"=?", 
