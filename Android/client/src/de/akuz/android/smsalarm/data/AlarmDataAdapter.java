@@ -190,7 +190,7 @@ public class AlarmDataAdapter {
 		Cursor mCursor = db.query(true,
 				NUMBER_TABLE_NAME, 
 				new String[]{NUMBER_ALARM_ID}, 
-				NUMBER_NUMBER_STRING+"="+temp, 
+				NUMBER_NUMBER_STRING+"='"+temp+"'", 
 				null, 
 				null, 
 				null, 
