@@ -188,9 +188,16 @@ public class AlarmDataAdapter {
 				NUMBER_ALARM_ID, 
 				null, 
 				null);
+		int numberAlarmId = mCursor.getColumnIndex(NUMBER_ALARM_ID);
+		List<AlarmGroup> tempList = getGroupsFromCursor(mCursor,numberAlarmId);
+		mCursor.close();
+		return Collections.unmodifiableList(tempList);
+	}
+	
+	private List<AlarmGroup> getGroupsFromCursor(Cursor mCursor, int idColumn){
+		int numberAlarmId = idColumn;
 		List<AlarmGroup> tempList = new ArrayList<AlarmGroup>();
 		mCursor.moveToFirst();
-		int numberAlarmId = mCursor.getColumnIndex(NUMBER_ALARM_ID);
 		if(mCursor.getCount()>0){
 			do {
 				long id = mCursor.getLong(numberAlarmId);
@@ -204,8 +211,7 @@ public class AlarmDataAdapter {
 				}
 			} while(mCursor.moveToNext());
 		}
-		mCursor.close();
-		return Collections.unmodifiableList(tempList);
+		return tempList;
 	}
 	
 	public AlarmGroup getAlarmGroupById(long id){
@@ -239,21 +245,9 @@ public class AlarmDataAdapter {
 				new String[]{ALARM_ID}, null, 
 				null, null, null, null);
 		Log.debug(TAG, "The cursor has "+mCursor.getCount()+" rows");
-		List<AlarmGroup> tempList = new ArrayList<AlarmGroup>();
-		mCursor.moveToFirst();
-		int numberAlarmId = mCursor.getColumnIndex(ALARM_ID);
-		if(mCursor.getCount()>0){
-			do {
-				long id = mCursor.getLong(numberAlarmId);
-				if(alarmGroupObjects.containsKey(id)){
-					tempList.add(alarmGroupObjects.get(id));
-				} else {
-					AlarmGroup tempGroup = new AlarmGroup(this,id);
-					tempList.add(tempGroup);
-					alarmGroupObjects.put(id, tempGroup);
-				}
-			}while(mCursor.moveToNext());
-		}
+		
+		int alarmId = mCursor.getColumnIndex(ALARM_ID);
+		List<AlarmGroup> tempList = getGroupsFromCursor(mCursor,alarmId);
 		mCursor.close();
 		return Collections.unmodifiableList(tempList);
 	}
