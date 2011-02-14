@@ -229,8 +229,9 @@ public class AlarmGroup {
 	 */
 	private Cursor getAlarmTableCursor(String[] columns){
 		return db.query(AlarmDataAdapter.ALARM_TABLE_NAME, 
-				new String[]{AlarmDataAdapter.ALARM_NAME},
-				AlarmDataAdapter.ALARM_ID+"=?", new String[]{String.valueOf(id)},
+				columns,
+				AlarmDataAdapter.ALARM_ID+"=?", 
+				new String[]{String.valueOf(id)},
 				null, null, null);
 	}
 	
