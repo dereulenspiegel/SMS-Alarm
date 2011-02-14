@@ -1,6 +1,10 @@
 package de.akuz.android.smsalarm.data;
 
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import de.akuz.android.smsalarm.util.Log;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -50,6 +54,28 @@ public class AlarmGroup {
 		String name = mCursor.getString(nameColumn);
 		mCursor.close();
 		return name;
+	}
+	
+	public List<String> getAllowedNumbers(){
+		List<String> retVal = new ArrayList<String>();
+		
+		Cursor mCursor = db.query(AlarmDataAdapter.NUMBER_TABLE_NAME, 
+				new String[]{AlarmDataAdapter.NUMBER_NUMBER_STRING}, 
+				AlarmDataAdapter.NUMBER_ALARM_ID+"=?", 
+				new String[]{String.valueOf(id)}, 
+				null, 
+				null, 
+				null);
+		
+		int senderColumn = 
+			mCursor.getColumnIndex(AlarmDataAdapter.NUMBER_NUMBER_STRING);
+		if(mCursor.getCount()>0){
+			do{
+				retVal.add(mCursor.getString(senderColumn));
+			}while(mCursor.moveToNext());
+		}
+		
+		return Collections.unmodifiableList(retVal);
 	}
 	
 	/**
