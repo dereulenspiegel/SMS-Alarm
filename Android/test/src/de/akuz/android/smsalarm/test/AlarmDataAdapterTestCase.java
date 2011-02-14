@@ -15,6 +15,8 @@ public class AlarmDataAdapterTestCase extends AndroidTestCase {
 	private final static String TEST_NAME="Testgruppe";
 	private final static String TEST_KEYWORD="bhp1";
 	private final static String TEST_SENDER="juh_do";
+	
+	AlarmGroup group;
 
 	@Override
 	protected void setUp() throws Exception {
@@ -38,10 +40,14 @@ public class AlarmDataAdapterTestCase extends AndroidTestCase {
 	}
 
 	public void testCreatingNewAlarmGroup() throws Exception {
-		AlarmGroup group = testAdapter.createNewAlarmGroup(TEST_NAME, TEST_KEYWORD);
-		group.addAllowedNumber(TEST_SENDER);
+		group = testAdapter.createNewAlarmGroup(TEST_NAME, TEST_KEYWORD);
 		Assert.assertEquals(1,testAdapter.getAllAlarmGroups().size());
+	}
+	
+	public void testListOfAllowedNumbers() throws Exception { 
+		group.addAllowedNumber(TEST_SENDER);
 		Assert.assertEquals(1, group.getAllowedNumbers().size());
+		Assert.assertEquals(TEST_SENDER, group.getAllowedNumbers().get(0));
 	}
 	
 	public void testRetrieveGroupByNumberAndKeyword() throws Exception {
