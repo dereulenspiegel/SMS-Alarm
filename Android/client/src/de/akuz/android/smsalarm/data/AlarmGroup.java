@@ -56,6 +56,10 @@ public class AlarmGroup {
 		return name;
 	}
 	
+	/**
+	 * Returns a list of all allowed sender numbers for this group
+	 * @return List<String>
+	 */
 	public List<String> getAllowedNumbers(){
 		List<String> retVal = new ArrayList<String>();
 		
@@ -77,6 +81,15 @@ public class AlarmGroup {
 		}
 		
 		return Collections.unmodifiableList(retVal);
+	}
+	
+	/**
+	 * Returns the unique id of this AlarmGroup. This id is the same as the
+	 * database id
+	 * @return long
+	 */
+	public long getId(){
+		return this.id;
 	}
 	
 	/**
