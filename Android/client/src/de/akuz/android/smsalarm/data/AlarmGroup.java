@@ -70,6 +70,7 @@ public class AlarmGroup {
 		int senderColumn = 
 			mCursor.getColumnIndex(AlarmDataAdapter.NUMBER_NUMBER_STRING);
 		if(mCursor.getCount()>0){
+			mCursor.moveToFirst();
 			do{
 				retVal.add(mCursor.getString(senderColumn));
 			}while(mCursor.moveToNext());
