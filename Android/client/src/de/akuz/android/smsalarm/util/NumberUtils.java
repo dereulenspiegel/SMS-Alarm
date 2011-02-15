@@ -23,9 +23,9 @@ public class NumberUtils {
 	 * @param number the given phone number as a string
 	 * @return true if the phone number is valid
 	 */
-	public static boolean isValidMobileNumber(String number){
-		Pattern mobileNumberPattern = Pattern.compile(MOBILE_NUMBER_PATTERN);
-		Matcher matcher = mobileNumberPattern.matcher(number);
+	public static boolean isValidMobileNumber(final String number){
+		final Pattern mobileNumberPattern = Pattern.compile(MOBILE_NUMBER_PATTERN);
+		final Matcher matcher = mobileNumberPattern.matcher(number);
 		return matcher.matches();
 	}
 	
@@ -37,7 +37,8 @@ public class NumberUtils {
 	 * @return true if number is in international format
 	 * @throws NumberFormatException
 	 */
-	public static boolean isInternationalNumber(String number) throws NumberFormatException{
+	public static boolean isInternationalNumber(final String number) 
+				throws NumberFormatException{
 		if(!isValidMobileNumber(number)){
 			throw new NumberFormatException();
 		}
@@ -54,13 +55,13 @@ public class NumberUtils {
 	 * @return the converted phone number
 	 * @throws NumberFormatException
 	 */
-	public static String convertNumberToInternationalFormat(String number) 
+	public static String convertNumberToInternationalFormat(final String number) 
 		throws NumberFormatException {
 		if(!isValidMobileNumber(number)){
 			throw new NumberFormatException();
 		}
 		if(isInternationalNumber(number)){
-			if(number.startsWith("+")){
+			if(number.charAt(0)=='+'){
 				return number;
 			} else {
 				number.replaceFirst("00", "+");
