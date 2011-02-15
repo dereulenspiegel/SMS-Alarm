@@ -179,7 +179,7 @@ public class AlarmDataAdapter {
 	 * @return an unmodifiable List of AlarmGroups
 	 */
 	public List<AlarmGroup> getAlarmGroupsByNumber(String number){
-		String temp = new String(number);
+		String temp = number.trim();
 		Log.debug(TAG,"Querying for "+number);
 		if(NumberUtils.isValidMobileNumber(number)){
 			Log.debug(TAG, "Sender seems to be a valid, mobile number, comverting to international format");
