@@ -104,5 +104,30 @@
 		</cpd>
 		<echo>CPD Task finished</echo>
 	</target>
+	
+	<target name="pmd">
+		<echo>Setting up PMD Task</echo>
+		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask">
+			<classpath refid="pmd.path" />
+		</taskdef>
+		<echo>Generating PMD Report</echo>
+		<pmd>
+			<ruleset>basic</ruleset>
+			<ruleset>unusedcode</ruleset>
+			<ruleset>android</ruleset>
+			<ruleset>braces</ruleset>
+			<ruleset>imports</ruleset>
+			<ruleset>optimizations</ruleset>
+			<ruleset>strings</ruleset>
+			<formatter type="xml" toFile="../pmd.xml" />
+			<fileset dir="../client/src">
+				<include name="**/*.java" />
+			</fileset>
+		</pmd>
+	</target>
+	
+	<target name="code-analysis" depends="cpd,pmd">
+		<echo>Generating reports for static code analysis</echo>
+	</target>
 
 </project>
