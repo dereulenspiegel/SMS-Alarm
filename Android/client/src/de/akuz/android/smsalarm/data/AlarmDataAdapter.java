@@ -65,7 +65,7 @@ public class AlarmDataAdapter {
 	 */
 	private static class DBHelper extends SQLiteOpenHelper{
 			
-		public DBHelper(Context context){
+		public DBHelper(final Context context){
 			super(context,DB_NAME,null,DB_VERSION);
 		}
 		
@@ -73,7 +73,7 @@ public class AlarmDataAdapter {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void onCreate(SQLiteDatabase db) {
+		public void onCreate(final SQLiteDatabase db) {
 			Log.debug(TAG,"Creating table with statement:"+ALARM_CREATE_STATEMENT);
 			db.execSQL(ALARM_CREATE_STATEMENT);
 			db.execSQL(NUMBER_CREATE_STATEMENT);
@@ -84,7 +84,8 @@ public class AlarmDataAdapter {
 		 * {@inheritDoc}
 		 */
 		@Override
-		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		public void onUpgrade(final SQLiteDatabase db, 
+				final int oldVersion, final int newVersion) {
 			//TODO: implement more intelligent upgrade mechanism
 			Log.debug(TAG,"Updating database, deleting old content...");
 			db.execSQL("DROP TABLE IF EXISTS "+ALARM_TABLE_NAME);
@@ -115,7 +116,7 @@ public class AlarmDataAdapter {
 	 * private constructor so only the getInstance method can create new instances
 	 * @param context
 	 */
-	private AlarmDataAdapter(Context context){
+	private AlarmDataAdapter(final Context context){
 		dbHelper = new DBHelper(context);
 		this.mContext = context;
 	}
@@ -126,11 +127,11 @@ public class AlarmDataAdapter {
 	 * @param context given Context
 	 * @return a instance of AlarmDataAdapter
 	 */
-	public static AlarmDataAdapter getInstance(Context context){
+	public static AlarmDataAdapter getInstance(final Context context){
 		if(instances.containsKey(context)){
 			return instances.get(context);
 		} else {
-			AlarmDataAdapter temp = new AlarmDataAdapter(context);
+			final AlarmDataAdapter temp = new AlarmDataAdapter(context);
 			instances.put(context, temp);
 			return temp;
 		}
@@ -178,7 +179,7 @@ public class AlarmDataAdapter {
 	 * @param number The number of the sender
 	 * @return an unmodifiable List of AlarmGroups
 	 */
-	public List<AlarmGroup> getAlarmGroupsByNumber(String number){
+	public List<AlarmGroup> getAlarmGroupsByNumber(final String number){
 		String temp = number.trim();
 		Log.debug(TAG,"Querying for "+number);
 		if(NumberUtils.isValidMobileNumber(number)){
@@ -187,7 +188,7 @@ public class AlarmDataAdapter {
 		}
 		//Use query this distinct = ture
 		Log.debug(TAG,"Querying for sender "+temp);
-		Cursor mCursor = db.query(true,
+		final Cursor mCursor = db.query(true,
 				NUMBER_TABLE_NAME, 
 				new String[]{NUMBER_ALARM_ID}, 
 				NUMBER_NUMBER_STRING+"='"+temp+"'", 
@@ -197,24 +198,25 @@ public class AlarmDataAdapter {
 				null,
 				null);
 		Log.debug(TAG, "Cursor has "+mCursor.getCount()+" results");
-		int numberAlarmId = mCursor.getColumnIndex(NUMBER_ALARM_ID);
-		List<AlarmGroup> tempList = getGroupsFromCursor(mCursor,numberAlarmId);
+		final int numberAlarmId = mCursor.getColumnIndex(NUMBER_ALARM_ID);
+		final List<AlarmGroup> tempList = getGroupsFromCursor(mCursor,numberAlarmId);
 		mCursor.close();
 		Log.debug(TAG, "Returning unmodifiable List");
 		return Collections.unmodifiableList(tempList);
 	}
 	
-	private List<AlarmGroup> getGroupsFromCursor(Cursor mCursor, int idColumn){
-		int numberAlarmId = idColumn;
-		List<AlarmGroup> tempList = new ArrayList<AlarmGroup>();
+	private List<AlarmGroup> getGroupsFromCursor(final Cursor mCursor, 
+			final int idColumn){
+		final int numberAlarmId = idColumn;
+		final List<AlarmGroup> tempList = new ArrayList<AlarmGroup>();
 		mCursor.moveToFirst();
 		if(mCursor.getCount()>0){
 			do {
-				long id = mCursor.getLong(numberAlarmId);
+				final long id = mCursor.getLong(numberAlarmId);
 				if(alarmGroupObjects.containsKey(id)){
 					tempList.add(alarmGroupObjects.get(id));
 				} else {
-					AlarmGroup tempGroup = 
+					final AlarmGroup tempGroup = 
 						new AlarmGroup(this,mCursor.getInt(numberAlarmId));
 					tempList.add(tempGroup);
 					alarmGroupObjects.put(id, tempGroup);
@@ -224,12 +226,12 @@ public class AlarmDataAdapter {
 		return tempList;
 	}
 	
-	public AlarmGroup getAlarmGroupById(long id){
+	public AlarmGroup getAlarmGroupById(final long id){
 		AlarmGroup retVal = null;
 		if(alarmGroupObjects.containsKey(id)){
 			return alarmGroupObjects.get(id);
 		}
-		Cursor mCursor = db.query(ALARM_TABLE_NAME, 
+		final Cursor mCursor = db.query(ALARM_TABLE_NAME, 
 				new String[]{ALARM_ID}, 
 				ALARM_ID+"=?", 
 				new String[]{ALARM_ID}, 
@@ -250,14 +252,14 @@ public class AlarmDataAdapter {
 	 */
 	public List<AlarmGroup> getAllAlarmGroups(){
 		Log.debug(TAG, "A List with all AlarmGroups is requested");
-		Cursor mCursor = db.query(
+		final Cursor mCursor = db.query(
 				ALARM_TABLE_NAME, 
 				new String[]{ALARM_ID}, null, 
 				null, null, null, null);
 		Log.debug(TAG, "The cursor has "+mCursor.getCount()+" rows");
 		
-		int alarmId = mCursor.getColumnIndex(ALARM_ID);
-		List<AlarmGroup> tempList = getGroupsFromCursor(mCursor,alarmId);
+		final int alarmId = mCursor.getColumnIndex(ALARM_ID);
+		final List<AlarmGroup> tempList = getGroupsFromCursor(mCursor,alarmId);
 		mCursor.close();
 		return Collections.unmodifiableList(tempList);
 	}
@@ -269,9 +271,10 @@ public class AlarmDataAdapter {
 	 * @param keyword
 	 * @return
 	 */
-	public AlarmGroup getAlarmGroupByNumberAndKeyword(String number, String keyword){
+	public AlarmGroup getAlarmGroupByNumberAndKeyword(final String number, 
+			final String keyword){
 		Log.debug(TAG,"Getting all AlarmGroups for sender "+number);
-		List<AlarmGroup> alarmGroups = getAlarmGroupsByNumber(number);
+		final List<AlarmGroup> alarmGroups = getAlarmGroupsByNumber(number);
 		Log.debug(TAG,"Got "+alarmGroups.size()+" groups");
 		for(AlarmGroup g : alarmGroups){
 			if(g.getKeyword().equals(keyword)){
@@ -288,7 +291,7 @@ public class AlarmDataAdapter {
 	 * alarmGroupObjects map
 	 * @param id The id of the AlarmGroup
 	 */
-	void closeAlarmGroup(long id){
+	void closeAlarmGroup(final long id){
 		alarmGroupObjects.remove(id);
 	}
 	
@@ -298,15 +301,16 @@ public class AlarmDataAdapter {
 	 * @param keyword The Keyword for this AlarmGroup
 	 * @return the created AlarmGroup
 	 */
-	public AlarmGroup createNewAlarmGroup(String name, String keyword) throws SQLException{
+	public AlarmGroup createNewAlarmGroup(final String name, 
+			final String keyword) throws SQLException{
 		Log.debug(TAG, "Creating new AlarmGroup with name "+name);
-		ContentValues values = new ContentValues();
+		final ContentValues values = new ContentValues();
 		values.put(ALARM_KEYWORD, keyword);
 		values.put(ALARM_NAME, name);
 
-		long id = db.insertOrThrow(ALARM_TABLE_NAME, null, values);
+		final long id = db.insertOrThrow(ALARM_TABLE_NAME, null, values);
 		Log.debug(TAG, "The new AlarmGroup has the ID "+id);
-		AlarmGroup group = new AlarmGroup(this,id);
+		final AlarmGroup group = new AlarmGroup(this,id);
 		alarmGroupObjects.put(id, group);
 		return group;
 	}
@@ -315,8 +319,8 @@ public class AlarmDataAdapter {
 	 * Deletes an AlarmGroup with the given id
 	 * @param id the id of the AlarmGroup which sould be deleted
 	 */
-	public void removeAlarmGroup(long id){
-		String[] args = {String.valueOf(id)};
+	public void removeAlarmGroup(final long id){
+		final String[] args = {String.valueOf(id)};
 		alarmGroupObjects.remove(id);
 		db.delete(ALARM_TABLE_NAME, ALARM_ID+"=?", args);
 		db.delete(NUMBER_TABLE_NAME, NUMBER_ALARM_ID+"=?", args);
