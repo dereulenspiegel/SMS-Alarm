@@ -30,6 +30,10 @@ public class AlarmGroupTestCase extends AndroidTestCase {
 		super.tearDown();
 	}
 	
+	public void testPositiveId() throws Exception {
+		Assert.assertTrue(group.getId()>0);
+	}
+	
 	public void testAddingAndRemovingAllowedNumbers() throws Exception {
 		String testSender1 = "juh_do";
 		String testSender2 = "01791791798";

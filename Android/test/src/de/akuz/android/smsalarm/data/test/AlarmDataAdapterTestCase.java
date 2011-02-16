@@ -1,5 +1,7 @@
 package de.akuz.android.smsalarm.data.test;
 
+import java.util.List;
+
 import junit.framework.Assert;
 
 import de.akuz.android.smsalarm.data.AlarmDataAdapter;
@@ -77,6 +79,14 @@ public class AlarmDataAdapterTestCase extends AndroidTestCase {
 		Assert.assertEquals(1, testAdapter.getAllAlarmGroups().size());
 		testAdapter.removeAlarmGroup(group.getId());
 		Assert.assertEquals(0, testAdapter.getAllAlarmGroups().size());
+	}
+	
+	public void testGetAlarmGroupsByNumber() throws Exception {
+		AlarmGroup group = createAlarmGroup(TEST_NAME,
+				TEST_KEYWORD, new String[]{TEST_SENDER});
+		List<AlarmGroup> testList = testAdapter.getAlarmGroupsByNumber(TEST_SENDER);
+		Assert.assertEquals(1, testList.size());
+		Assert.assertEquals(group, testList.get(0));
 	}
 
 }
