@@ -54,5 +54,26 @@ public class AlarmGroupTestCase extends AndroidTestCase {
 		group.setRingtoneURI(null);
 		Assert.assertTrue(group.getRingtoneURI()!=null);
 	}
+	
+	public void testModifyingKeyword() throws Exception {
+		String newKeyword = "SEG_Alarm";
+		Assert.assertEquals(TEST_KEYWORD, group.getKeyword());
+		group.setKeyword(newKeyword);
+		Assert.assertEquals(newKeyword, group.getKeyword());
+	}
+	
+	public void testModifyingName() throws Exception {
+		String newName = "SEG Betreuung";
+		Assert.assertEquals(TEST_NAME, group.getName());
+		group.setName(newName);
+		Assert.assertEquals(newName, group.getName());
+	}
+	
+	public void testModifyingLEDColor() throws Exception {
+		int oldColor = group.getLEDColor();
+		int newColor = 0x2323;
+		group.setLEDColor(newColor);
+		Assert.assertEquals(newColor, group.getLEDColor());
+	}
 
 }

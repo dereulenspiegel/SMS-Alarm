@@ -164,7 +164,9 @@ public class AlarmGroup {
 		mCursor.moveToFirst();
 		final int vibrateColumn = 
 			mCursor.getColumnIndex(AlarmDataAdapter.ALARM_VIBRATE);
-		vibrate = mCursor.getInt(vibrateColumn)==1;
+		if(!mCursor.isNull(vibrateColumn)){
+			vibrate = mCursor.getInt(vibrateColumn)==1;
+		}
 		mCursor.close();
 		return vibrate;
 	}
@@ -182,7 +184,11 @@ public class AlarmGroup {
 		}
 		mCursor.moveToFirst();
 		final int ledColumn = mCursor.getColumnIndex(AlarmDataAdapter.ALARM_LED);
-		final int ledColor = mCursor.getInt(ledColumn);
+		int ledColor = -1;
+		if(!mCursor.isNull(ledColumn)){
+			ledColor = mCursor.getInt(ledColumn);
+		}
+		
 		mCursor.close();
 		return ledColor;
 	}
