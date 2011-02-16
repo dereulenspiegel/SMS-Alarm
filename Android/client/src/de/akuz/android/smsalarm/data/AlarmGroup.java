@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import de.akuz.android.smsalarm.util.Log;
+import de.akuz.android.smsalarm.util.TextUtils;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -126,13 +127,26 @@ public class AlarmGroup {
 	 * Sets the uri to the alarm ringtone of this alarm group
 	 * @param uri
 	 */
-	public void setRingtoneURI(final String uri){
+	private void saveRingtoneURI(final String uri){
 		final ContentValues values = new ContentValues();
 		values.put(AlarmDataAdapter.ALARM_RINGTONE, uri);
 		db.update(AlarmDataAdapter.ALARM_TABLE_NAME, 
 				values, 
 				AlarmDataAdapter.ALARM_ID+"=?", 
 				new String[]{String.valueOf(id)});
+	}
+	
+	/**
+	 * Sets the uri to the alarm ringtone of this alarm group. If you give null or
+	 * an empty uri string a default ringtone uri will be set
+	 * @param uri
+	 */
+	public void setRingtoneURI(final String uri){
+		if(TextUtils.isNonEmptyString(uri)){
+			saveRingtoneURI(uri);
+		} else {
+			//TODO: Set a default uri
+		}
 	}
 	
 	/**
