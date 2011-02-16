@@ -15,6 +15,8 @@ public class NumberUtils {
 	 */
 	private final static String MOBILE_NUMBER_PATTERN =
 		"/^(01|\\+491|00491)(5|6|7)([0-9])([0-9]{7})$/";
+	private final static Pattern mobileNumberPattern = 
+		Pattern.compile(MOBILE_NUMBER_PATTERN);
 	
 	/**
 	 * This method checks is the given phone number is in a valid format accordings to
@@ -24,7 +26,6 @@ public class NumberUtils {
 	 * @return true if the phone number is valid
 	 */
 	public static boolean isValidMobileNumber(final String number){
-		final Pattern mobileNumberPattern = Pattern.compile(MOBILE_NUMBER_PATTERN);
 		final Matcher matcher = mobileNumberPattern.matcher(number);
 		return matcher.matches();
 	}
