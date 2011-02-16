@@ -38,13 +38,23 @@ public class Alarm implements Parcelable {
 	 */
 	private boolean vibrate;
 	
+	/**
+	 * A needed field for Parcelables
+	 */
 	public static final Parcelable.Creator<Alarm> CREATOR = new Creator<Alarm>(){
 
+		
+		/**
+		 * {@inheritDoc}
+		 */
 		@Override
 		public Alarm createFromParcel(final Parcel source) {
 			return new Alarm(source);
 		}
-
+		
+		/**
+		 * {@inheritDoc}
+		 */
 		@Override
 		public Alarm[] newArray(final int size) {
 			return new Alarm[size];
@@ -52,10 +62,23 @@ public class Alarm implements Parcelable {
 		
 	};
 	
+	/**
+	 * Private constructor used to recreate an Alarm object from a Parcel
+	 * @param in
+	 */
 	private Alarm(final Parcel in){
 		readFromParcel(in);
 	}
 	
+	/**
+	 * Simple constructor with necessary arguments
+	 * @param sender
+	 * @param message
+	 * @param description
+	 * @param ledColor
+	 * @param ringtoneUri
+	 * @param vibrate
+	 */
 	public Alarm(final String sender, final String message, 
 			final String description, final int ledColor, 
 			final String ringtoneUri, final boolean vibrate){
@@ -67,23 +90,45 @@ public class Alarm implements Parcelable {
 		this.vibrate = vibrate;
 	}
 	
+	/**
+	 * Constructor for convienience
+	 * @param group
+	 * @param sender
+	 * @param message
+	 */
 	public Alarm(final AlarmGroup group, final String sender, final String message){
 		this(sender, message,group.getName(),group.getLEDColor(),
 				group.getRingtoneURI(), group.vibrate());
 	}
 
+	/**
+	 * Returns a String representing the sender of the message
+	 * @return
+	 */
 	public String getSender() {
 		return sender;
 	}
-
+	
+	/**
+	 * Returns the received message without the keyword
+	 * @return
+	 */
 	public String getMessage() {
 		return message;
 	}
-
+	
+	/**
+	 * Returns the Description (name) of the AlarmGroup through which this Alarm
+	 * was generated
+	 * @return
+	 */
 	public String getDescription() {
 		return description;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public int describeContents() {
 		return 0;
@@ -101,7 +146,10 @@ public class Alarm implements Parcelable {
 		this.ringtoneUri = in.readString();
 		this.vibrate = in.readInt()==1;
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void writeToParcel(final Parcel parcel, final int flags) {
 		parcel.writeString(this.sender);
@@ -111,15 +159,27 @@ public class Alarm implements Parcelable {
 		parcel.writeString(ringtoneUri);
 		parcel.writeInt(vibrate?1:0);
 	}
-
+	
+	/**
+	 * Returns the color in which the LED should flash
+	 * @return
+	 */
 	public int getLedColor() {
 		return ledColor;
 	}
-
+	
+	/**
+	 * Return the ringtone URI for this alarm
+	 * @return
+	 */
 	public String getRingtoneUri() {
 		return ringtoneUri;
 	}
-
+	
+	/**
+	 * Wether the mobile should vibrate
+	 * @return
+	 */
 	public boolean isVibrate() {
 		return vibrate;
 	}
