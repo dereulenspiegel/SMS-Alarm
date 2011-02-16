@@ -10,6 +10,8 @@ import java.util.regex.Pattern;
  */
 public class NumberUtils {
 	
+	private final static String TAG = "NumberUtils";
+	
 	/**
 	 * A regular expression describing a valid mobile phone number
 	 */
@@ -26,6 +28,7 @@ public class NumberUtils {
 	 * @return true if the phone number is valid
 	 */
 	public static boolean isValidMobileNumber(final String number){
+		Log.debug(TAG, "Checking if "+number+" is a valid mobile number");
 		final Matcher matcher = mobileNumberPattern.matcher(number);
 		return matcher.matches();
 	}
@@ -40,6 +43,7 @@ public class NumberUtils {
 	 */
 	public static boolean isInternationalNumber(final String number) 
 				throws NumberFormatException{
+		Log.debug(TAG, "Checking if "+number+" is a number in international format");
 		if(!isValidMobileNumber(number)){
 			throw new NumberFormatException();
 		}
@@ -58,6 +62,7 @@ public class NumberUtils {
 	 */
 	public static String convertNumberToInternationalFormat(final String number) 
 		throws NumberFormatException {
+		Log.debug(TAG, "Converting "+number+" to international format");
 		if(!isValidMobileNumber(number)){
 			throw new NumberFormatException();
 		}
