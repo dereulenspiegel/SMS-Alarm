@@ -11,12 +11,16 @@ public class AlarmGroupTestCase extends AndroidTestCase {
 	
 	private final static String TEST_NAME = "bhp_do1";
 	private final static String TEST_KEYWORD = "bhp_alarm";
+	
+	private AlarmGroup group;
 
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
 		alarmAdapter = AlarmDataAdapter.getInstance(getContext());
 		alarmAdapter.open();
+		alarmAdapter.clear();
+		group = alarmAdapter.createNewAlarmGroup(TEST_NAME, TEST_KEYWORD);
 	}
 
 	@Override
@@ -29,7 +33,7 @@ public class AlarmGroupTestCase extends AndroidTestCase {
 	public void testAddingAndRemovingAllowedNumbers() throws Exception {
 		String testSender1 = "juh_do";
 		String testSender2 = "01791791798";
-		AlarmGroup group = alarmAdapter.createNewAlarmGroup(TEST_NAME, TEST_KEYWORD);
+		
 		group.addAllowedNumber(testSender1);
 		group.addAllowedNumber(testSender2);
 		Assert.assertEquals(2, group.getAllowedNumbers().size());
@@ -44,7 +48,7 @@ public class AlarmGroupTestCase extends AndroidTestCase {
 	
 	public void testSettingAndRemovingRingtoneURI() throws Exception {
 		String testUri = "test://uri";
-		AlarmGroup group = alarmAdapter.createNewAlarmGroup(TEST_NAME, TEST_KEYWORD);
+
 		group.setRingtoneURI(testUri);
 		Assert.assertEquals(testUri, group.getRingtoneURI());
 		group.setRingtoneURI(null);
