@@ -66,6 +66,11 @@ public class Alarm implements Parcelable {
 		this.ringtoneUri = ringtoneUri;
 		this.vibrate = vibrate;
 	}
+	
+	public Alarm(final AlarmGroup group, final String sender, final String message){
+		this(sender, message,group.getName(),group.getLEDColor(),
+				group.getRingtoneURI(), group.vibrate());
+	}
 
 	public String getSender() {
 		return sender;
