@@ -42,7 +42,7 @@ public class AlarmTestCase extends AndroidTestCase {
 		Parcel parcel = Parcel.obtain();
 		testAlarm.writeToParcel(parcel, 0);
 		parcel.setDataPosition(0);
-		Alarm parcelAlarm = parcel.readParcelable(this.getClass().getClassLoader());
+		Alarm parcelAlarm = parcel.readParcelable(null);
 		Assert.assertEquals(testAlarm, parcelAlarm);
 	}
 
