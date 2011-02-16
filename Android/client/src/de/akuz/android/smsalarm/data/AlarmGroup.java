@@ -171,6 +171,15 @@ public class AlarmGroup {
 		return vibrate;
 	}
 	
+	public void setVibrate(final boolean vibrate){
+		final ContentValues values = new ContentValues();
+		values.put(AlarmDataAdapter.ALARM_VIBRATE, vibrate);
+		db.update(AlarmDataAdapter.ALARM_TABLE_NAME, 
+				values, 
+				AlarmDataAdapter.ALARM_ID+"=?", 
+				new String[]{String.valueOf(id)});
+	}
+	
 	/**
 	 * Returns an integer representing the color in which LED should blink in case
 	 * of an alarm. See the android reference for more details about this integer.
