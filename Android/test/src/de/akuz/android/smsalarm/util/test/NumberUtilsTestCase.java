@@ -2,8 +2,9 @@ package de.akuz.android.smsalarm.util.test;
 
 import de.akuz.android.smsalarm.util.NumberUtils;
 import junit.framework.Assert;
+import junit.framework.TestCase;
 
-public class NumberUtilsTestCase {
+public class NumberUtilsTestCase extends TestCase{
 	
 	private final static String internationalFormat = "+491791791798";
 	private final static String internationalFormat2 = "00491791791798";
