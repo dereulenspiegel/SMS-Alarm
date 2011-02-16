@@ -40,10 +40,17 @@ public class AlarmTestCase extends AndroidTestCase {
 	
 	public void testParcelableMarshalling() throws Exception {
 		Parcel parcel = Parcel.obtain();
+		Assert.assertNotNull(testAlarm);
 		testAlarm.writeToParcel(parcel, 0);
 		parcel.setDataPosition(0);
-		Alarm parcelAlarm = parcel.readParcelable(null);
-		Assert.assertEquals(testAlarm, parcelAlarm);
+		//Alarm parcelAlarm = parcel.readParcelable(this.getClass().getClassLoader());
+		Alarm parcelAlarm = Alarm.CREATOR.createFromParcel(parcel);
+		Assert.assertEquals(parcelAlarm.getSender(), testAlarm.getSender());
+		Assert.assertEquals(parcelAlarm.getMessage(), testAlarm.getMessage());
+		Assert.assertEquals(parcelAlarm.getDescription(), testAlarm.getDescription());
+		Assert.assertEquals(parcelAlarm.getLedColor(), testAlarm.getLedColor());
+		Assert.assertEquals(parcelAlarm.getRingtoneUri(), testAlarm.getRingtoneUri());
+		Assert.assertEquals(parcelAlarm.isVibrate(), testAlarm.isVibrate());
 	}
 
 }
