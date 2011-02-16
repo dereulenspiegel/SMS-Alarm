@@ -16,7 +16,7 @@ public class NumberUtils {
 	 * A regular expression describing a valid mobile phone number
 	 */
 	private final static String MOBILE_NUMBER_PATTERN =
-		"/^(01|\\+491|00491)(5|6|7)([0-9])([0-9]{7})$/";
+		"^(01|\\+491|00491)(5|6|7)([0-9])([0-9]{7})$";
 	private final static Pattern mobileNumberPattern = 
 		Pattern.compile(MOBILE_NUMBER_PATTERN);
 	
