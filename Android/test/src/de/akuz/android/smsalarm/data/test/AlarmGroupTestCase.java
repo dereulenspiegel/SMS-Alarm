@@ -16,6 +16,7 @@ public class AlarmGroupTestCase extends AndroidTestCase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		alarmAdapter = AlarmDataAdapter.getInstance(getContext());
+		alarmAdapter.open();
 	}
 
 	@Override
