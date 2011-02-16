@@ -6,10 +6,10 @@ import junit.framework.TestCase;
 
 public class NumberUtilsTestCase extends TestCase{
 	
-	private final static String internationalFormat = "+491791791798";
-	private final static String internationalFormat2 = "00491791791798";
-	private final static String localFormat = "01791791798";
-	private final static String notANumber = "NotaNumber";
+	private String internationalFormat;
+	private String internationalFormat2;
+	private String localFormat;
+	private String notANumber;
 	
 	public void testIsValidMobileNumber() throws Exception {
 		Assert.assertTrue(NumberUtils.isValidMobileNumber(internationalFormat));
@@ -43,6 +43,15 @@ public class NumberUtilsTestCase extends TestCase{
 			exceptionThrown = true;
 		}
 		Assert.assertTrue(exceptionThrown);
+	}
+
+	@Override
+	protected void setUp() throws Exception {
+		super.setUp();
+		internationalFormat = "+491791791798";
+		internationalFormat2 = "00491791791798";
+		localFormat = "01791791798";
+		notANumber = "NotaNumber";
 	}
 
 }
