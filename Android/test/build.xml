@@ -81,7 +81,7 @@
     -->
     <setup />
 	
-	<property name="libs.home" value="libs" />
+	<property name="libs.home" value="test-libs" />
 	<path id="libs.path">
 		<fileset dir="${libs.home}">
 			<include name="**/*.jar" />

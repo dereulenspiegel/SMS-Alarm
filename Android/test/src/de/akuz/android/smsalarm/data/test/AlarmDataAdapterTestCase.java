@@ -1,4 +1,4 @@
-package de.akuz.android.smsalarm.test;
+package de.akuz.android.smsalarm.data.test;
 
 import junit.framework.Assert;
 
