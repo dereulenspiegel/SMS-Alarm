@@ -70,10 +70,16 @@ public class AlarmGroupTestCase extends AndroidTestCase {
 	}
 	
 	public void testModifyingLEDColor() throws Exception {
-		int oldColor = group.getLEDColor();
+		Assert.assertEquals(-1, group.getLEDColor());
 		int newColor = 0x2323;
 		group.setLEDColor(newColor);
 		Assert.assertEquals(newColor, group.getLEDColor());
+	}
+	
+	public void testModifyingVibrateSetting() throws Exception {
+		Assert.assertFalse(group.vibrate());
+		group.setVibrate(true);
+		Assert.assertTrue(group.vibrate());
 	}
 
 }
