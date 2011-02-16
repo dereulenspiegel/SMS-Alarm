@@ -76,6 +76,7 @@ public class NumberUtils {
 				return number;
 			}
 		} else {
+			Log.debug(TAG, "We got a national number, converting");
 			number.replaceFirst("0", "+49");
 			return number;
 		}
