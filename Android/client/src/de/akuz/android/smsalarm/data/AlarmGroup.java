@@ -172,6 +172,10 @@ public class AlarmGroup {
 		return vibrate;
 	}
 	
+	/**
+	 * Set wether this alarms based on this AlarmGroup should let the mobile vibrate
+	 * @param vibrate
+	 */
 	public void setVibrate(final boolean vibrate){
 		final ContentValues values = new ContentValues();
 		values.put(AlarmDataAdapter.ALARM_VIBRATE, vibrate);
