@@ -60,7 +60,7 @@ public class NumberUtils {
 	 * @return the converted phone number
 	 * @throws NumberFormatException
 	 */
-	public static String convertNumberToInternationalFormat(final String number) 
+	public static String convertNumberToInternationalFormat(String number) 
 			throws NumberFormatException {
 		Log.debug(TAG, "Converting "+number+" to international format");
 		if(!isValidMobileNumber(number)){
@@ -72,12 +72,12 @@ public class NumberUtils {
 				return number;
 			} else {
 				Log.debug(TAG,"Number is in old international format");
-				number.replaceFirst("00", "+");
+				number = number.replaceFirst("00", "+");
 				return number;
 			}
 		} else {
 			Log.debug(TAG, "We got a national number, converting");
-			number.replaceFirst("0", "+49");
+			number = number.replaceFirst("0", "+49");
 			return number;
 		}
 		
