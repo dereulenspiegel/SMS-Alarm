@@ -18,11 +18,11 @@ public class Log {
 	
 	private static boolean logToSD=false;
 	
-	public static void setLogToSD(boolean toSD){
+	public static void setLogToSD(final boolean toSD){
 		logToSD=toSD;
 	}
 	
-	public static void setLogPath(String path){
+	public static void setLogPath(final String path){
 		logPath = path;
 	}
 	
@@ -30,11 +30,13 @@ public class Log {
 		return logPath;
 	}
 	
-	public static void writeLog(String tag, String message, Throwable t){
-		Date date = new Date();
-		SimpleDateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSS");
-		String dateString = dateFormat.format(date);
-		StringBuilder builder = new StringBuilder();
+	public static void writeLog(final String tag, final String message, 
+			final Throwable t){
+		final Date date = new Date();
+		final SimpleDateFormat dateFormat = 
+			new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSS");
+		final String dateString = dateFormat.format(date);
+		final StringBuilder builder = new StringBuilder();
 		builder.append(dateString);
 		builder.append(':');
 		builder.append(' ');
@@ -75,11 +77,11 @@ public class Log {
 		}
 	}
 	
-	public static void writeLog(String tag, String message){
+	public static void writeLog(final String tag, final String message){
 		writeLog(tag,message,null);
 	}
 	
-	public static void debug(String tag, String message){
+	public static void debug(final String tag, final String message){
 		if(Config.LOGD){
 			android.util.Log.d(tag, message);
 			if(logToSD){
@@ -88,7 +90,8 @@ public class Log {
 		}
 	}
 	
-	public static void debug(String tag, String message, Throwable t){
+	public static void debug(final String tag, final String message, 
+			final Throwable t){
 		if(Config.LOGD){
 			android.util.Log.d(tag, message, t);
 			if(logToSD){
@@ -97,7 +100,7 @@ public class Log {
 		}
 	}
 	
-	public static void verbose(String tag, String message){
+	public static void verbose(final String tag, final String message){
 		if(Config.LOGV){
 			android.util.Log.v(tag, message);
 			if(logToSD){
@@ -106,7 +109,8 @@ public class Log {
 		}
 	}
 	
-	public static void verbose(String tag, String message, Throwable t){
+	public static void verbose(final String tag, final String message, 
+			final Throwable t){
 		if(Config.LOGV){
 			android.util.Log.v(tag, message, t);
 			if(logToSD){
@@ -115,42 +119,44 @@ public class Log {
 		}
 	}
 	
-	public static void info(String tag, String message){
+	public static void info(final String tag, final String message){
 			android.util.Log.i(tag, message);
 			if(logToSD){
 				writeLog(tag,message);
 			}
 	}
 	
-	public static void info(String tag, String message, Throwable t){
+	public static void info(final String tag, final String message, final Throwable t){
 			android.util.Log.i(tag, message, t);
 			if(logToSD){
 				writeLog(tag,message,t);
 			}
 	}
 	
-	public static void error(String tag, String message){
+	public static void error(final String tag, final String message){
 		android.util.Log.e(tag, message);
 		if(logToSD){
 			writeLog(tag,message);
 		}
 	}
 	
-	public static void error(String tag, String message, Throwable t){
+	public static void error(final String tag, final String message, 
+			final Throwable t){
 		android.util.Log.e(tag, message, t);
 		if(logToSD){
 			writeLog(tag,message,t);
 		}
 	}
 	
-	public static void warning(String tag, String message){
+	public static void warning(final String tag, final String message){
 		android.util.Log.w(tag, message);
 		if(logToSD){
 			writeLog(tag,message);
 		}
 	}
 	
-	public static void warning(String tag, String message, Throwable t){
+	public static void warning(final String tag, final String message, 
+			final Throwable t){
 		android.util.Log.w(tag, message, t);
 		if(logToSD){
 			writeLog(tag,message,t);
