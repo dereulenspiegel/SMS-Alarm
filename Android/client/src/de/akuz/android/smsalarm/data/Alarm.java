@@ -41,23 +41,24 @@ public class Alarm implements Parcelable {
 	public static final Parcelable.Creator<Alarm> CREATOR = new Creator<Alarm>(){
 
 		@Override
-		public Alarm createFromParcel(Parcel source) {
+		public Alarm createFromParcel(final Parcel source) {
 			return new Alarm(source);
 		}
 
 		@Override
-		public Alarm[] newArray(int size) {
+		public Alarm[] newArray(final int size) {
 			return new Alarm[size];
 		}
 		
 	};
 	
-	private Alarm(Parcel in){
+	private Alarm(final Parcel in){
 		readFromParcel(in);
 	}
 	
-	public Alarm(String sender, String message, String description, int ledColor, 
-			String ringtoneUri, boolean vibrate){
+	public Alarm(final String sender, final String message, 
+			final String description, final int ledColor, 
+			final String ringtoneUri, final boolean vibrate){
 		this.sender = sender;
 		this.message = message;
 		this.description = description;
@@ -87,7 +88,7 @@ public class Alarm implements Parcelable {
 	 * Helper methos for constructing an instance from a Parcel
 	 * @param in
 	 */
-	private void readFromParcel(Parcel in){
+	private void readFromParcel(final Parcel in){
 		this.sender = in.readString();
 		this.message = in.readString();
 		this.description = in.readString();
@@ -97,7 +98,7 @@ public class Alarm implements Parcelable {
 	}
 
 	@Override
-	public void writeToParcel(Parcel parcel, int flags) {
+	public void writeToParcel(final Parcel parcel, final int flags) {
 		parcel.writeString(this.sender);
 		parcel.writeString(this.message);
 		parcel.writeString(this.description);
