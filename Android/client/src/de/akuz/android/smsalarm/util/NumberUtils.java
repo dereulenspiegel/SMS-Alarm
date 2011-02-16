@@ -61,15 +61,17 @@ public class NumberUtils {
 	 * @throws NumberFormatException
 	 */
 	public static String convertNumberToInternationalFormat(final String number) 
-		throws NumberFormatException {
+			throws NumberFormatException {
 		Log.debug(TAG, "Converting "+number+" to international format");
 		if(!isValidMobileNumber(number)){
 			throw new NumberFormatException();
 		}
 		if(isInternationalNumber(number)){
 			if(number.charAt(0)=='+'){
+				Log.debug(TAG, "Number seems to be already in a valid format");
 				return number;
 			} else {
+				Log.debug(TAG,"Number is in old international format");
 				number.replaceFirst("00", "+");
 				return number;
 			}
