@@ -79,7 +79,7 @@ public class AlarmGroup {
 				retVal.add(mCursor.getString(senderColumn));
 			}while(mCursor.moveToNext());
 		}
-		
+		mCursor.close();
 		return Collections.unmodifiableList(retVal);
 	}
 	
