@@ -27,7 +27,7 @@ public class AlarmGroup {
 	private SQLiteDatabase db;
 	private AlarmDataAdapter parent;
 
-	AlarmGroup(AlarmDataAdapter parent, long id){
+	AlarmGroup(final AlarmDataAdapter parent, final long id){
 		this.db = parent.getDatabase();
 		this.parent = parent;
 		this.id = id;
@@ -45,13 +45,13 @@ public class AlarmGroup {
 	 * @return the name
 	 */
 	public String getName(){
-		Cursor mCursor = getAlarmTableCursor( new String[]{AlarmDataAdapter.ALARM_NAME});
+		final Cursor mCursor = getAlarmTableCursor( new String[]{AlarmDataAdapter.ALARM_NAME});
 		if(mCursor.getCount()>1 || mCursor.getCount()<1){
 			throw new IllegalArgumentException("We have too many are too few name entries in our database for id: "+id);
 		}
 		mCursor.moveToFirst();
-		int nameColumn = mCursor.getColumnIndex(AlarmDataAdapter.ALARM_NAME);
-		String name = mCursor.getString(nameColumn);
+		final int nameColumn = mCursor.getColumnIndex(AlarmDataAdapter.ALARM_NAME);
+		final String name = mCursor.getString(nameColumn);
 		mCursor.close();
 		return name;
 	}
@@ -61,9 +61,9 @@ public class AlarmGroup {
 	 * @return List<String>
 	 */
 	public List<String> getAllowedNumbers(){
-		List<String> retVal = new ArrayList<String>();
+		final List<String> retVal = new ArrayList<String>();
 		
-		Cursor mCursor = db.query(AlarmDataAdapter.NUMBER_TABLE_NAME, 
+		final Cursor mCursor = db.query(AlarmDataAdapter.NUMBER_TABLE_NAME, 
 				new String[]{AlarmDataAdapter.NUMBER_NUMBER_STRING}, 
 				AlarmDataAdapter.NUMBER_ALARM_ID+"=?", 
 				new String[]{String.valueOf(id)}, 
@@ -71,7 +71,7 @@ public class AlarmGroup {
 				null, 
 				null);
 		
-		int senderColumn = 
+		final int senderColumn = 
 			mCursor.getColumnIndex(AlarmDataAdapter.NUMBER_NUMBER_STRING);
 		if(mCursor.getCount()>0){
 			mCursor.moveToFirst();
@@ -96,8 +96,8 @@ public class AlarmGroup {
 	 * Sets the descriptional name for this alarm group
 	 * @param name
 	 */
-	public void setName(String name){
-		ContentValues values = new ContentValues();
+	public void setName(final String name){
+		final ContentValues values = new ContentValues();
 		db.update(AlarmDataAdapter.ALARM_TABLE_NAME, 
 				values, 
 				AlarmDataAdapter.ALARM_ID+"=?", 
@@ -109,13 +109,15 @@ public class AlarmGroup {
 	 * @return an URI
 	 */
 	public String getRingtoneURI(){
-		Cursor mCursor = getAlarmTableCursor(new String[]{AlarmDataAdapter.ALARM_RINGTONE});
+		final Cursor mCursor = 
+			getAlarmTableCursor(new String[]{AlarmDataAdapter.ALARM_RINGTONE});
 		if(mCursor.getCount()!=1){
 			throw new IllegalArgumentException("We seem to have none ore more than one ringtone uri for this alarm. id: "+id);
 		}
 		mCursor.moveToFirst();
-		int ringtoneColumn = mCursor.getColumnIndex(AlarmDataAdapter.ALARM_RINGTONE);
-		String ringtone = mCursor.getString(ringtoneColumn);
+		final int ringtoneColumn = 
+			mCursor.getColumnIndex(AlarmDataAdapter.ALARM_RINGTONE);
+		final String ringtone = mCursor.getString(ringtoneColumn);
 		mCursor.close();
 		return ringtone;
 	}
@@ -124,8 +126,8 @@ public class AlarmGroup {
 	 * Sets the uri to the alarm ringtone of this alarm group
 	 * @param uri
 	 */
-	public void setRingtoneURI(String uri){
-		ContentValues values = new ContentValues();
+	public void setRingtoneURI(final String uri){
+		final ContentValues values = new ContentValues();
 		values.put(AlarmDataAdapter.ALARM_RINGTONE, uri);
 		db.update(AlarmDataAdapter.ALARM_TABLE_NAME, 
 				values, 
@@ -138,14 +140,16 @@ public class AlarmGroup {
 	 * @return
 	 */
 	public boolean vibrate(){
-		Cursor mCursor = getAlarmTableCursor(new String[]{AlarmDataAdapter.ALARM_VIBRATE});
+		final Cursor mCursor = 
+			getAlarmTableCursor(new String[]{AlarmDataAdapter.ALARM_VIBRATE});
 		boolean vibrate = false;
 		if(mCursor.getCount()!=1){
 			mCursor.close();
 			return false;
 		}
 		mCursor.moveToFirst();
-		int vibrateColumn = mCursor.getColumnIndex(AlarmDataAdapter.ALARM_VIBRATE);
+		final int vibrateColumn = 
+			mCursor.getColumnIndex(AlarmDataAdapter.ALARM_VIBRATE);
 		vibrate = mCursor.getInt(vibrateColumn)==1;
 		mCursor.close();
 		return vibrate;
@@ -157,13 +161,14 @@ public class AlarmGroup {
 	 * @return
 	 */
 	public int getLEDColor(){	
-		Cursor mCursor = getAlarmTableCursor(new String[]{AlarmDataAdapter.ALARM_LED});
+		final Cursor mCursor = 
+			getAlarmTableCursor(new String[]{AlarmDataAdapter.ALARM_LED});
 		if(mCursor.getCount()!=1){
 			throw new IllegalArgumentException("We seem to have none ore more than one led color for this alarm. id: "+id);
 		}
 		mCursor.moveToFirst();
-		int ledColumn = mCursor.getColumnIndex(AlarmDataAdapter.ALARM_LED);
-		int ledColor = mCursor.getInt(ledColumn);
+		final int ledColumn = mCursor.getColumnIndex(AlarmDataAdapter.ALARM_LED);
+		final int ledColor = mCursor.getInt(ledColumn);
 		mCursor.close();
 		return ledColor;
 	}
@@ -173,8 +178,8 @@ public class AlarmGroup {
 	 * docs on how the hardware tries to match the color;
 	 * @param ledColor
 	 */
-	public void setLEDColor(int ledColor){
-		ContentValues values = new ContentValues();
+	public void setLEDColor(final int ledColor){
+		final ContentValues values = new ContentValues();
 		values.put(AlarmDataAdapter.ALARM_LED, ledColor);
 		db.update(AlarmDataAdapter.ALARM_TABLE_NAME, 
 				values, 
@@ -187,13 +192,15 @@ public class AlarmGroup {
 	 * @return a String representing the keyword
 	 */
 	public String getKeyword(){
-		Cursor mCursor = getAlarmTableCursor(new String[]{AlarmDataAdapter.ALARM_KEYWORD});
+		final Cursor mCursor = 
+			getAlarmTableCursor(new String[]{AlarmDataAdapter.ALARM_KEYWORD});
 		if(mCursor.getCount()!=1){
 			throw new IllegalArgumentException("We seem to have none ore more than one entries for this alarm. id: "+id);
 		}
 		mCursor.moveToFirst();
-		int alarmKeyword = mCursor.getColumnIndex(AlarmDataAdapter.ALARM_KEYWORD);
-		String keyword = mCursor.getString(alarmKeyword);
+		final int alarmKeyword = 
+			mCursor.getColumnIndex(AlarmDataAdapter.ALARM_KEYWORD);
+		final String keyword = mCursor.getString(alarmKeyword);
 		mCursor.close();
 		return keyword;
 	}
@@ -202,8 +209,8 @@ public class AlarmGroup {
 	 * Sets a new alarm keyword for this alarm group
 	 * @param keyword
 	 */
-	public void setKeyword(String keyword){
-		ContentValues values = new ContentValues();
+	public void setKeyword(final String keyword){
+		final ContentValues values = new ContentValues();
 		values.put(AlarmDataAdapter.ALARM_KEYWORD, keyword);
 		db.update(AlarmDataAdapter.ALARM_TABLE_NAME, 
 				values, 
@@ -216,12 +223,13 @@ public class AlarmGroup {
 	 * SMS can contain much more than just numbers, any String can be put here
 	 * @param number the new allowed sender of alarm sms for this AlarmGroup
 	 */
-	public void addAllowedNumber(String number){
+	public void addAllowedNumber(final String number){
 		Log.debug(TAG,"Inserting new allowed number "+number);
-		ContentValues values = new ContentValues();
+		final ContentValues values = new ContentValues();
 		values.put(AlarmDataAdapter.NUMBER_ALARM_ID, id);
 		values.put(AlarmDataAdapter.NUMBER_NUMBER_STRING, number);
-		long row = db.insertOrThrow(AlarmDataAdapter.NUMBER_TABLE_NAME, null, values);
+		final long row = 
+			db.insertOrThrow(AlarmDataAdapter.NUMBER_TABLE_NAME, null, values);
 		Log.debug(TAG, "The new allowed number has the row id "+row);
 	}
 	
@@ -229,7 +237,7 @@ public class AlarmGroup {
 	 * Deletes a number (or sender) from the list of allowed numbers
 	 * @param number the sender to be removed
 	 */
-	public void removeAllowedNumber(String number){
+	public void removeAllowedNumber(final String number){
 		db.delete(AlarmDataAdapter.NUMBER_TABLE_NAME, 
 				AlarmDataAdapter.NUMBER_NUMBER_STRING+"=?", 
 				new String[]{number});
@@ -240,7 +248,7 @@ public class AlarmGroup {
 	 * @param columns
 	 * @return
 	 */
-	private Cursor getAlarmTableCursor(String[] columns){
+	private Cursor getAlarmTableCursor(final String[] columns){
 		return db.query(AlarmDataAdapter.ALARM_TABLE_NAME, 
 				columns,
 				AlarmDataAdapter.ALARM_ID+"=?", 
