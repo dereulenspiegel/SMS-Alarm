@@ -48,7 +48,7 @@ public class AlarmGroupTestCase extends AndroidTestCase {
 		group.setRingtoneURI(testUri);
 		Assert.assertEquals(testUri, group.getRingtoneURI());
 		group.setRingtoneURI(null);
-		Assert.assertEquals(null, group.getRingtoneURI());
+		Assert.assertTrue(group.getRingtoneURI()!=null);
 	}
 
 }
