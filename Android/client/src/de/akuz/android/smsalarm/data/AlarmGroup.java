@@ -99,6 +99,7 @@ public class AlarmGroup {
 	 */
 	public void setName(final String name){
 		final ContentValues values = new ContentValues();
+		values.put(AlarmDataAdapter.ALARM_NAME, name);
 		db.update(AlarmDataAdapter.ALARM_TABLE_NAME, 
 				values, 
 				AlarmDataAdapter.ALARM_ID+"=?", 
