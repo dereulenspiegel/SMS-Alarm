@@ -81,10 +81,17 @@
     -->
     <setup />
 	
-	<property name="pmd.home" value="libs" />
-	<path id="pmd.path">
-		<fileset dir="${pmd.home}">
+	<property name="libs.home" value="libs" />
+	<path id="libs.path">
+		<fileset dir="${libs.home}">
 			<include name="**/*.jar" />
+		</fileset>
+	</path>
+	
+	<property name="client.src" value="../client/src" />
+	<path id="client.src.path">
+		<fileset dir="${client.src}">
+			<include name="**/*.java"/>
 		</fileset>
 	</path>
 	
@@ -94,11 +101,11 @@
 	<target name="cpd">
 		<echo>Setting up CPD Task</echo>
 		<taskdef name="cpd" classname="net.sourceforge.pmd.cpd.CPDTask" >
-			<classpath refid="pmd.path" />
+			<classpath refid="libs.path" />
 		</taskdef>
 		<echo>Starting CPD and generating report</echo>
 		<cpd minimumTokenCount="100" outputFile="../cpd.xml" format="xml">
-			<fileset dir="../client/src/">
+			<fileset dir="${client.src}">
 				<include name="**/*.java"/>
 			</fileset>
 		</cpd>
@@ -108,7 +115,7 @@
 	<target name="pmd">
 		<echo>Setting up PMD Task</echo>
 		<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask">
-			<classpath refid="pmd.path" />
+			<classpath refid="libs.path" />
 		</taskdef>
 		<echo>Generating PMD Report</echo>
 		<pmd>
@@ -126,7 +133,24 @@
 		</pmd>
 	</target>
 	
-	<target name="code-analysis" depends="cpd,pmd">
+	<target name="ncss">
+		<echo>Setting up Java NCSS Task</echo>
+		<taskdef name="javancss" classname="javancss.JavancssAntTask">
+			<classpath refid="libs.path"/>
+		</taskdef>
+		<echo>Generating NCSS report</echo>
+		<javancss srcdir="${client.src}"
+			includes="**/*.java"
+			generateReport="yes"
+			outputfile="../javancss.xml"
+			format="xml"
+			packageMetrics="yes"
+			classMetrics="yes"
+			functionMetrics="yes">
+		</javancss>
+	</target>
+	
+	<target name="code-analysis" depends="cpd,pmd,ncss">
 		<echo>Generating reports for static code analysis</echo>
 	</target>
 
