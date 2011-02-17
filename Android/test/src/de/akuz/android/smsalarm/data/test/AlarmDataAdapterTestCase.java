@@ -108,6 +108,12 @@ public class AlarmDataAdapterTestCase extends AndroidTestCase {
 		Assert.assertNotNull(testList);
 		Assert.assertEquals(1, testList.size());
 		Assert.assertEquals(group.getId(), testList.get(0).getId());
+		//Test with mobile number
+		String number = "01791791798";
+		group.addAllowedNumber(number);
+		testList = testAdapter.getAlarmGroupsByNumber(number);
+		Assert.assertEquals(1, testList.size());
+		Assert.assertEquals(group.getId(), testList.get(0).getId());
 	}
 
 }
