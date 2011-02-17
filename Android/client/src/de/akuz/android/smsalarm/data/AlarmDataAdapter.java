@@ -234,7 +234,7 @@ public class AlarmDataAdapter {
 		final Cursor mCursor = db.query(ALARM_TABLE_NAME, 
 				new String[]{ALARM_ID}, 
 				ALARM_ID+"=?", 
-				new String[]{ALARM_ID}, 
+				new String[]{String.valueOf(id)}, 
 				null, 
 				null, 
 				null);

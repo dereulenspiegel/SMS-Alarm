@@ -75,6 +75,7 @@ public class AlarmDataAdapterTestCase extends AndroidTestCase {
 		long id = group.getId();
 		testAdapter.closeAllChilds();
 		group2 = testAdapter.getAlarmGroupById(id);
+		Assert.assertNotNull(group2);
 		Assert.assertEquals(id, group2.getId());
 		Assert.assertEquals(TEST_NAME, group2.getName());
 		Assert.assertEquals(TEST_KEYWORD, group2.getKeyword());
