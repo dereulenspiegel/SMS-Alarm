@@ -18,20 +18,20 @@ public class SMSReceiver extends BroadcastReceiver {
 	private Context mContext;
 
 	@Override
-	public void onReceive(Context context, Intent intent) {
+	public void onReceive(final Context context, final Intent intent) {
 		this.mContext = context;
-		Bundle bundle = intent.getExtras();
+		final Bundle bundle = intent.getExtras();
 		//Get an instance of our AlarmAdapter for later query
-		AlarmDataAdapter adapter = AlarmDataAdapter.getInstance(context);
+		final AlarmDataAdapter adapter = AlarmDataAdapter.getInstance(context);
 		
 		//get all message "pdus"
-		Object messages[] = (Object[]) bundle.get("pdus");
+		final Object messages[] = (Object[]) bundle.get("pdus");
 		
-		List<Alarm> alarms = new ArrayList<Alarm>();
+		final List<Alarm> alarms = new ArrayList<Alarm>();
 		
 		//got through all pdus, build sms from them and check if we have an alarm sms
 		for (int n = 0; n < messages.length; n++) {
-			SmsMessage temp = SmsMessage.createFromPdu((byte[])messages[n]);
+			final SmsMessage temp = SmsMessage.createFromPdu((byte[])messages[n]);
 			String body = temp.getDisplayMessageBody();
 			String keyWord = "";
 			if(TextUtils.isNonEmptyString(body)){
@@ -39,7 +39,7 @@ public class SMSReceiver extends BroadcastReceiver {
 				body = body.substring(body.indexOf(' '));
 			} 
 			
-			AlarmGroup group = adapter.getAlarmGroupByNumberAndKeyword(
+			final AlarmGroup group = adapter.getAlarmGroupByNumberAndKeyword(
 					temp.getDisplayOriginatingAddress(), 
 					keyWord);
 			//If the sms matches an alarm group, build an alarm and add it to the list
@@ -64,8 +64,8 @@ public class SMSReceiver extends BroadcastReceiver {
 	 * what all the fuzz is about
 	 * @param alarms
 	 */
-	private void sendAlarm(List<Alarm> alarms){
-		Intent alarmIntent = new Intent(mContext,AlarmActivity.class);
+	private void sendAlarm(final List<Alarm> alarms){
+		final Intent alarmIntent = new Intent(mContext,AlarmActivity.class);
 		alarmIntent.putExtra(Alarm.PARCELABLE_KEYWORD, alarms.toArray(new Alarm[]{}));
 		mContext.startActivity(alarmIntent);
 	}
