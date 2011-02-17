@@ -2,6 +2,8 @@ package de.akuz.android.smsalarm.data.test;
 
 import junit.framework.Assert;
 import de.akuz.android.smsalarm.data.Alarm;
+import de.akuz.android.smsalarm.data.AlarmDataAdapter;
+import de.akuz.android.smsalarm.data.AlarmGroup;
 import android.os.Parcel;
 import android.test.AndroidTestCase;
 
@@ -51,6 +53,29 @@ public class AlarmTestCase extends AndroidTestCase {
 		Assert.assertEquals(parcelAlarm.getLedColor(), testAlarm.getLedColor());
 		Assert.assertEquals(parcelAlarm.getRingtoneUri(), testAlarm.getRingtoneUri());
 		Assert.assertEquals(parcelAlarm.isVibrate(), testAlarm.isVibrate());
+	}
+	
+	public void testCreatingAlarmFromAlarmGroup() throws Exception {
+		AlarmDataAdapter testAdapter = AlarmDataAdapter.getInstance(getContext());
+		String testKeyword = "bhp_do1";
+		Assert.assertNotNull(testAdapter);
+		testAdapter.open();
+		testAdapter.clear();
+		AlarmGroup testGroup = testAdapter.createNewAlarmGroup(TEST_NAME, testKeyword);
+		testGroup.addAllowedNumber(TEST_SENDER);
+		testGroup.setLEDColor(LED_COLOR);
+		testGroup.setRingtoneURI(RINGTONE_URI);
+		testGroup.setVibrate(VIBRATE);
+		
+		Alarm testAlarm = new Alarm(testGroup, TEST_SENDER, TEST_MESSAGE);
+		Assert.assertEquals(TEST_SENDER, testAlarm.getSender());
+		Assert.assertEquals(TEST_MESSAGE, testAlarm.getMessage());
+		Assert.assertEquals(TEST_NAME, testAlarm.getDescription());
+		Assert.assertEquals(LED_COLOR, testAlarm.getLedColor());
+		Assert.assertEquals(RINGTONE_URI, testAlarm.getRingtoneUri());
+		Assert.assertEquals(VIBRATE, testAlarm.isVibrate());
+		testAdapter.closeAllChilds();
+		testAdapter.close();
 	}
 
 }
