@@ -10,13 +10,14 @@ import android.widget.ArrayAdapter;
 
 public class AlarmListAdapter extends ArrayAdapter<Alarm> {
 
-	public AlarmListAdapter(Context context) {
+	public AlarmListAdapter(final Context context) {
 		super(context, 0);
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		Alarm alarm = this.getItem(position);
+	public View getView(final int position, final View convertView, 
+			final ViewGroup parent) {
+		final Alarm alarm = this.getItem(position);
 		AlarmItem itemView;
 		if(convertView !=null){
 			itemView = (AlarmItem)convertView;
