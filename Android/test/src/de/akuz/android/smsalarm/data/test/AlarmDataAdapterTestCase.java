@@ -71,6 +71,15 @@ public class AlarmDataAdapterTestCase extends AndroidTestCase {
 		AlarmGroup group2 = testAdapter.getAlarmGroupById(group.getId());
 		Assert.assertEquals(group.getId(), group2.getId());
 		Assert.assertEquals(group, group2);
+		//now test for non cache hits
+		long id = group.getId();
+		testAdapter.closeAllChilds();
+		group2 = testAdapter.getAlarmGroupById(id);
+		Assert.assertEquals(id, group2.getId());
+		Assert.assertEquals(TEST_NAME, group2.getName());
+		Assert.assertEquals(TEST_KEYWORD, group2.getKeyword());
+		Assert.assertEquals(1, group2.getAllowedNumbers().size());
+		Assert.assertEquals(TEST_SENDER, group2.getAllowedNumbers().get(0));
 	}
 	
 	public void testRemoveAlarmGroup() throws Exception {
