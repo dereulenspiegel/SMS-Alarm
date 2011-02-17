@@ -41,7 +41,7 @@ public class AlarmActivity extends Activity {
 	private int menu_acknowledge_alarm;
 	
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.alarm_activity);
 		alarmListView = (ListView)findViewById(R.id.AlarmListView);
@@ -56,7 +56,7 @@ public class AlarmActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		//TODO: Refresh intent
-		Alarm[] alarms = 
+		final Alarm[] alarms = 
 			(Alarm[]) callingIntent.getParcelableArrayExtra(Alarm.PARCELABLE_KEYWORD);
 		alarmListAdapter.clear();
 		
@@ -92,8 +92,9 @@ public class AlarmActivity extends Activity {
 				TAG);
 		myWakeLock.acquire();
 		//Disable the Keyguard
-		KeyguardManager  myKeyGuard = (KeyguardManager)getSystemService(Context.KEYGUARD_SERVICE);
-		KeyguardLock myLock = myKeyGuard.newKeyguardLock(TAG);
+		final KeyguardManager  myKeyGuard = 
+			(KeyguardManager)getSystemService(Context.KEYGUARD_SERVICE);
+		final KeyguardLock myLock = myKeyGuard.newKeyguardLock(TAG);
 		myLock.disableKeyguard();
 		
 		//Play the selected ringtone for notification. And play at it again and again
@@ -130,7 +131,7 @@ public class AlarmActivity extends Activity {
 	 * This activity is singleTop so we have to handle new intents
 	 */
 	@Override
-	protected void onNewIntent(Intent intent) {
+	protected void onNewIntent(final Intent intent) {
 		super.onNewIntent(intent);
 		callingIntent = intent;
 	}
@@ -140,7 +141,7 @@ public class AlarmActivity extends Activity {
 	 * the notification by accident
 	 */
 	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
+	public boolean onKeyDown(final int keyCode, final KeyEvent event) {
 		//If we are notificating the user of an alarm, it should only be possible to leave
 		//this activity by acknowledging the alarm correctly
 		if(continueNotification && (keyCode == KeyEvent.KEYCODE_BACK 
@@ -151,14 +152,14 @@ public class AlarmActivity extends Activity {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		MenuItem item = menu.add(getString(R.string.acknowlegde_alarm));
+	public boolean onCreateOptionsMenu(final Menu menu) {
+		final MenuItem item = menu.add(getString(R.string.acknowlegde_alarm));
 		this.menu_acknowledge_alarm = item.getItemId();
 		return true;
 	}
 
 	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+	public boolean onMenuItemSelected(final int featureId, final MenuItem item) {
 		if(item.getItemId() == this.menu_acknowledge_alarm){
 			//TODO:Show a dialog
 			stopAlarm();
