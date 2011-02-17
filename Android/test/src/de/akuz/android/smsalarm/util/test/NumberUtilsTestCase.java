@@ -36,6 +36,8 @@ public class NumberUtilsTestCase extends TestCase{
 				NumberUtils.convertNumberToInternationalFormat(localFormat));
 		Assert.assertEquals(internationalFormat, 
 				NumberUtils.convertNumberToInternationalFormat(internationalFormat2));
+		Assert.assertEquals(internationalFormat, 
+				NumberUtils.convertNumberToInternationalFormat(internationalFormat));
 		boolean exceptionThrown = false;
 		try{
 			NumberUtils.convertNumberToInternationalFormat(notANumber);
