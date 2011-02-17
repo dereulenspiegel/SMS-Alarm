@@ -3,6 +3,7 @@ package de.akuz.android.smsalarm.data.test;
 import junit.framework.Assert;
 import de.akuz.android.smsalarm.data.AlarmDataAdapter;
 import de.akuz.android.smsalarm.data.AlarmGroup;
+import de.akuz.android.smsalarm.util.NumberUtils;
 import android.test.AndroidTestCase;
 
 public class AlarmGroupTestCase extends AndroidTestCase {
@@ -84,6 +85,16 @@ public class AlarmGroupTestCase extends AndroidTestCase {
 		Assert.assertFalse(group.vibrate());
 		group.setVibrate(true);
 		Assert.assertTrue(group.vibrate());
+	}
+	
+	public void testMobileNumbersAsSender() throws Exception {
+		String nationalMobile = "01791791798";
+		String internationalMobile = "+491791234567";
+		group.addAllowedNumber(nationalMobile);
+		group.addAllowedNumber(internationalMobile);
+		Assert.assertTrue(group.getAllowedNumbers().contains(internationalMobile));
+		Assert.assertTrue(group.getAllowedNumbers().contains(
+				NumberUtils.convertNumberToInternationalFormat(nationalMobile)));
 	}
 
 }
