@@ -43,12 +43,14 @@ public class AlarmGroupTestCase extends AndroidTestCase {
 		group.addAllowedNumber(testSender2);
 		Assert.assertEquals(2, group.getAllowedNumbers().size());
 		Assert.assertTrue(group.getAllowedNumbers().contains(testSender1));
-		Assert.assertTrue(group.getAllowedNumbers().contains(testSender2));
+		Assert.assertTrue(group.getAllowedNumbers().contains(
+				NumberUtils.convertNumberToInternationalFormat(testSender2)));
 		group.removeAllowedNumber(testSender1);
 		group.removeAllowedNumber(testSender2);
 		Assert.assertEquals(0, group.getAllowedNumbers().size());
 		Assert.assertFalse(group.getAllowedNumbers().contains(testSender1));
-		Assert.assertFalse(group.getAllowedNumbers().contains(testSender2));
+		Assert.assertFalse(group.getAllowedNumbers().contains(
+				NumberUtils.convertNumberToInternationalFormat(testSender2)));
 	}
 	
 	public void testSettingAndRemovingRingtoneURI() throws Exception {

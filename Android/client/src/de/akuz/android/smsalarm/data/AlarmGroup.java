@@ -277,9 +277,13 @@ public class AlarmGroup {
 	 * @param number the sender to be removed
 	 */
 	public void removeAllowedNumber(final String number){
+		String sender = number.trim();
+		if(NumberUtils.isValidMobileNumber(sender)){
+			sender = NumberUtils.convertNumberToInternationalFormat(sender);
+		}
 		db.delete(AlarmDataAdapter.NUMBER_TABLE_NAME, 
 				AlarmDataAdapter.NUMBER_NUMBER_STRING+"=?", 
-				new String[]{number});
+				new String[]{sender});
 	}
 	
 	/**
