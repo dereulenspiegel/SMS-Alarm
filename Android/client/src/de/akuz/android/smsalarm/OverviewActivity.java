@@ -20,7 +20,7 @@ public class OverviewActivity extends Activity implements OnClickListener{
 	private AlarmDataAdapter alarmDataAdapter;
 	
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.overview_activity);
         alarmGroupListView = (ListView)findViewById(R.id.AlarmGroupListView);
@@ -34,7 +34,7 @@ public class OverviewActivity extends Activity implements OnClickListener{
 
 
 	@Override
-	public void onClick(View view) {
+	public void onClick(final View view) {
 		if(view.getId() == addAlarmGroupButton.getId()){
 			addAlarmGroupButtonClicked();
 		}
