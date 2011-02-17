@@ -12,14 +12,15 @@ import android.widget.TextView;
 
 public class AlarmGroupListAdapter extends ArrayAdapter<AlarmGroup> {
 
-	public AlarmGroupListAdapter(Context context, int textViewResourceId,
-			List<AlarmGroup> objects) {
+	public AlarmGroupListAdapter(final Context context, final int textViewResourceId,
+			final List<AlarmGroup> objects) {
 		super(context, textViewResourceId, objects);
 	}
 
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		AlarmGroup group = getItem(position);
+	public View getView(final int position, final View convertView, 
+			final ViewGroup parent) {
+		final AlarmGroup group = getItem(position);
 		View alarmGroupView;
 		if(convertView != null){
 			alarmGroupView = convertView;
@@ -29,10 +30,10 @@ public class AlarmGroupListAdapter extends ArrayAdapter<AlarmGroup> {
 						parent.getContext()).inflate(R.layout.alarm_group_view, null);
 		}
 		
-		TextView alarmName = 
+		final TextView alarmName = 
 			(TextView)alarmGroupView.findViewById(R.id.AlarmGroupNameTextView);
 		alarmName.setText(group.getName());
-		TextView alarmKeyword = 
+		final TextView alarmKeyword = 
 			(TextView)alarmGroupView.findViewById(R.id.alarmKeywordTextView);
 		alarmKeyword.setText(group.getKeyword());
 		
