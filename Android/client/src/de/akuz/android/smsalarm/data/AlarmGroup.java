@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import de.akuz.android.smsalarm.util.Log;
+import de.akuz.android.smsalarm.util.NumberUtils;
 import de.akuz.android.smsalarm.util.TextUtils;
 import android.content.ContentValues;
 import android.database.Cursor;
@@ -259,9 +260,13 @@ public class AlarmGroup {
 	 */
 	public void addAllowedNumber(final String number){
 		Log.debug(TAG,"Inserting new allowed number "+number);
+		String sender = number.trim();
+		if(NumberUtils.isValidMobileNumber(sender)){
+			sender = NumberUtils.convertNumberToInternationalFormat(sender);
+		}
 		final ContentValues values = new ContentValues();
 		values.put(AlarmDataAdapter.NUMBER_ALARM_ID, id);
-		values.put(AlarmDataAdapter.NUMBER_NUMBER_STRING, number);
+		values.put(AlarmDataAdapter.NUMBER_NUMBER_STRING, sender);
 		final long row = 
 			db.insertOrThrow(AlarmDataAdapter.NUMBER_TABLE_NAME, null, values);
 		Log.debug(TAG, "The new allowed number has the row id "+row);
