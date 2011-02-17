@@ -102,6 +102,12 @@ public class AlarmDataAdapterTestCase extends AndroidTestCase {
 		List<AlarmGroup> testList = testAdapter.getAlarmGroupsByNumber(TEST_SENDER);
 		Assert.assertEquals(1, testList.size());
 		Assert.assertEquals(group, testList.get(0));
+		//And no again wit no groups in cache
+		testAdapter.closeAllChilds();
+		testList = testAdapter.getAlarmGroupsByNumber(TEST_SENDER);
+		Assert.assertNotNull(testList);
+		Assert.assertEquals(1, testList.size());
+		Assert.assertEquals(group.getId(), testList.get(0).getId());
 	}
 
 }
