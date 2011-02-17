@@ -63,6 +63,11 @@ public class AlarmDataAdapterTestCase extends AndroidTestCase {
 		Assert.assertNotNull(group);
 		Assert.assertEquals(TEST_KEYWORD, group.getKeyword());
 		Assert.assertEquals(TEST_NAME, group.getName());
+		
+		AlarmGroup nullGroup = 
+			testAdapter.getAlarmGroupByNumberAndKeyword(
+					"fake_number", "nonexistant keyword");
+		Assert.assertTrue(nullGroup == null);
 	}
 	
 	public void testGetAlarmGroupById() throws Exception {
