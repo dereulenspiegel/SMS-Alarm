@@ -3,4 +3,13 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   android:layout_width="fill_parent"
   android:layout_height="fill_parent">
+    <TextView android:id="@+id/textView1" android:layout_alignParentLeft="true" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_margin="5dp" android:layout_alignBaseline="@+id/editText1" android:text="@string/alarm_group_name"></TextView>
+    <TextView android:layout_below="@+id/textView1" android:id="@+id/textView2" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_margin="5dp" android:text="@string/alarm_keyword_" android:layout_alignBaseline="@+id/editKeyword"></TextView>
+    <TextView android:id="@+id/textView3" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_margin="5dp" android:text="Tone" android:layout_alignBaseline="@+id/buttonSelectTone"></TextView>
+    <CheckBox android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_toRightOf="@+id/textView4" android:text="@string/vibrate_for_alarm" android:id="@+id/checkVibrate" android:layout_below="@+id/buttonSelectTone"></CheckBox>
+    <ListView android:layout_width="fill_parent" android:id="@+id/listView1" android:layout_height="fill_parent" android:layout_alignLeft="@+id/checkVibrate" android:layout_below="@+id/buttonAddSender"></ListView>
+    <Button android:layout_height="wrap_content" android:layout_width="wrap_content" android:text="@string/add_allowed_number" android:id="@+id/buttonAddSender" android:layout_below="@+id/checkVibrate"></Button>
+    <EditText android:layout_height="wrap_content" android:layout_toRightOf="@+id/textView1" android:layout_width="fill_parent" android:id="@+id/editName" android:layout_alignLeft="@+id/editKeyword"></EditText>
+    <EditText android:layout_height="wrap_content" android:layout_toRightOf="@+id/textView2" android:layout_width="fill_parent" android:id="@+id/editKeyword" android:layout_below="@+id/editName"></EditText>
+    <Button android:text="@string/select_alarm_tone" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_alignParentRight="true" android:layout_below="@+id/editKeyword" android:id="@+id/buttonSelectTone"></Button>
 </RelativeLayout>
