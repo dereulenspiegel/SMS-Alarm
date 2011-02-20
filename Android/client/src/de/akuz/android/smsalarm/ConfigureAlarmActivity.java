@@ -90,9 +90,9 @@ public class ConfigureAlarmActivity extends Activity
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(final Menu menu) {
-		MenuItem saveItem = menu.add(0, MENU_SAVE, 0, getString(R.string.menu_save));
+		final MenuItem saveItem = menu.add(0, MENU_SAVE, 0, getString(R.string.menu_save));
 		saveItem.setIcon(android.R.drawable.ic_menu_add);
-		MenuItem cancelItem = 
+		final MenuItem cancelItem = 
 			menu.add(0, MENU_CANCEL, 0, getString(R.string.menu_cancel));
 		cancelItem.setIcon(android.R.drawable.ic_menu_delete);
 		return true;
@@ -103,9 +103,9 @@ public class ConfigureAlarmActivity extends Activity
 	 */
 	@Override
 	protected void onDestroy() {
-		super.onDestroy();
 		alarmAdapter.closeAllChilds();
 		alarmAdapter.clear();
+		super.onDestroy();
 	}
 	
 	/**
@@ -147,8 +147,9 @@ public class ConfigureAlarmActivity extends Activity
 	 * This method starts the Ringtone Picker on the System
 	 */
 	private void selectRingtone(){
-		Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
-		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
+		final Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, 
+				RingtoneManager.TYPE_NOTIFICATION);
 		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE, "Select Tone");
 		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, (Uri) null);
 		this.startActivityForResult(intent, RINGTONE_REQUEST_CODE);
@@ -184,9 +185,10 @@ public class ConfigureAlarmActivity extends Activity
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	protected void onActivityResult(final int requestCode, final int resultCode, 
+			final Intent data) {
 		if(resultCode == Activity.RESULT_OK && requestCode == RINGTONE_REQUEST_CODE){
-			Uri uri = 
+			final Uri uri = 
 				data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
 			if(uri!=null){
 				ringtoneUri = uri.toString();
@@ -200,8 +202,8 @@ public class ConfigureAlarmActivity extends Activity
 	 * @param uri The Uri of the Ringtone as String representation
 	 * @return the human readable name as String
 	 */
-	private String getToneTitle(String uri){
-		Ringtone myTone = RingtoneManager.getRingtone(this, Uri.parse(uri));
+	private String getToneTitle(final String uri){
+		final Ringtone myTone = RingtoneManager.getRingtone(this, Uri.parse(uri));
 		myTone.getTitle(this);
 		return myTone.getTitle(this);
 	}
@@ -210,7 +212,7 @@ public class ConfigureAlarmActivity extends Activity
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onClick(View v) {
+	public void onClick(final View v) {
 		if(v.getId() == buttonSelectTone.getId()){
 			selectRingtone();
 		} else if(v.getId() == buttonAddSender.getId()){
@@ -222,7 +224,7 @@ public class ConfigureAlarmActivity extends Activity
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+	public boolean onMenuItemSelected(final int featureId, final MenuItem item) {
 		if(item.getItemId() == MENU_SAVE){
 			save();
 			return true;
@@ -238,11 +240,11 @@ public class ConfigureAlarmActivity extends Activity
 	 * {@inheritDoc}
 	 */
 	@Override
-	public boolean onContextItemSelected(MenuItem item) {
+	public boolean onContextItemSelected(final MenuItem item) {
 		if(item.getItemId() == CONTEXT_MENU_REMOVE_SENDER){
-			AdapterContextMenuInfo menuInfo = 
+			final AdapterContextMenuInfo menuInfo = 
 				(AdapterContextMenuInfo)item.getMenuInfo();
-			String sender = allowedSenderAdapter.getItem(menuInfo.position);
+			final String sender = allowedSenderAdapter.getItem(menuInfo.position);
 			allowedSenderAdapter.remove(sender);
 			return true;
 		}
@@ -253,8 +255,8 @@ public class ConfigureAlarmActivity extends Activity
 	 * {@inheritDoc}
 	 */
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v,
-			ContextMenuInfo menuInfo) {
+	public void onCreateContextMenu(final ContextMenu menu, final View v,
+			final ContextMenuInfo menuInfo) {
 		if(v.getId() == allowedSenderListView.getId()){
 			menu.setHeaderTitle(R.string.remove_allowed_number);
 			menu.add(0, CONTEXT_MENU_REMOVE_SENDER, 0, R.string.remove_allowed_number);
@@ -267,7 +269,7 @@ public class ConfigureAlarmActivity extends Activity
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void onNewIntent(Intent intent) {
+	protected void onNewIntent(final Intent intent) {
 		this.setIntent(intent);
 		super.onNewIntent(intent);
 	}
@@ -276,7 +278,7 @@ public class ConfigureAlarmActivity extends Activity
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected Dialog onCreateDialog(int id) {
+	protected Dialog onCreateDialog(final int id) {
 		switch(id){
 		case DIALOG_ENTER_SENDER:
 			return createEnterSenderDialog();
@@ -290,7 +292,7 @@ public class ConfigureAlarmActivity extends Activity
 	 * @return a dialog object
 	 */
 	private Dialog createEnterSenderDialog(){
-		Dialog dialog = new Dialog(this);
+		final Dialog dialog = new Dialog(this);
 		dialog.setTitle(R.string.add_allowed_number);
 		//TODO: Set view, access ui elements, add listener etc.
 		return dialog;
