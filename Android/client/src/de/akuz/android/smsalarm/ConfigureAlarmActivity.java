@@ -68,6 +68,7 @@ public class ConfigureAlarmActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.configure_activity);
 		alarmAdapter = AlarmDataAdapter.getInstance(this);
+		alarmAdapter.open();
 		
 		editKeyword = (EditText)findViewById(R.id.editKeyword);
 		editName = (EditText)findViewById(R.id.editName);
@@ -104,7 +105,7 @@ public class ConfigureAlarmActivity extends Activity
 	@Override
 	protected void onDestroy() {
 		alarmAdapter.closeAllChilds();
-		alarmAdapter.clear();
+		alarmAdapter.close();
 		super.onDestroy();
 	}
 	
