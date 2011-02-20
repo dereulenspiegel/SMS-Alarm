@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class AlarmGroupListAdapter extends ArrayAdapter<AlarmGroup> {
@@ -36,6 +37,16 @@ public class AlarmGroupListAdapter extends ArrayAdapter<AlarmGroup> {
 		final TextView alarmKeyword = 
 			(TextView)alarmGroupView.findViewById(R.id.alarmKeywordTextView);
 		alarmKeyword.setText(group.getKeyword());
+		
+		final ListView allowedNumberListView = 
+			(ListView)alarmGroupView.findViewById(R.id.AllowedNumbersListView);
+		final ArrayAdapter<String> listAdapter = 
+			new ArrayAdapter<String>(parent.getContext(),android.R.layout.simple_list_item_1);
+		allowedNumberListView.setAdapter(listAdapter);
+		listAdapter.clear();
+		for(String s : group.getAllowedNumbers()){
+			listAdapter.add(s);
+		}
 		
 		return alarmGroupView;
 	}
