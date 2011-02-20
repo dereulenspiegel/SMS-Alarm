@@ -24,12 +24,22 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+/**
+ * This Activity is for editing existing AlarmGroups and adding new ones.
+ * All information is only saved when the user selects the "Save" menu item. Otherwise
+ * all changes are discarded.
+ * @author Till Klocke
+ *
+ */
 public class ConfigureAlarmActivity extends Activity 
 			implements OnClickListener, OnCreateContextMenuListener{
 	
 	private AlarmDataAdapter alarmAdapter;
 	private AlarmGroup currentGroup;
 	
+	/**
+	 * All UI-Elements with which we interact
+	 */
 	private EditText editKeyword;
 	private EditText editName;
 	private CheckBox checkBoxVibrate;
@@ -41,13 +51,18 @@ public class ConfigureAlarmActivity extends Activity
 	
 	private ArrayAdapter<String> allowedSenderAdapter;
 	
+	/**
+	 * static ints for identifying MenuItems, dialogs and so on
+	 */
 	private final static int RINGTONE_REQUEST_CODE = 5;
 	private final static int MENU_SAVE = 0;
 	private final static int MENU_CANCEL = 1;
 	private final static int CONTEXT_MENU_REMOVE_SENDER = 2;
 	private final static int DIALOG_ENTER_SENDER = 3;
 	
-	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,6 +85,9 @@ public class ConfigureAlarmActivity extends Activity
 		buttonAddSender.setOnClickListener(this);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(final Menu menu) {
 		MenuItem saveItem = menu.add(0, MENU_SAVE, 0, getString(R.string.menu_save));
@@ -80,22 +98,33 @@ public class ConfigureAlarmActivity extends Activity
 		return true;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
 		alarmAdapter.closeAllChilds();
 		alarmAdapter.clear();
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onPause() {
 		super.onPause();
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onResume() {
 		super.onResume();
 		if(this.getIntent().getLongExtra(AlarmGroup.EXTRA_ALARM_GROUP_ID, -1)>-1){
+			//if we get an id of an existing AlarmGroup, load the AlarmGroup
+			//and populate the info to the UI Elements
 			currentGroup = 
 				alarmAdapter.getAlarmGroupById(
 						this.getIntent().getLongExtra(
@@ -114,6 +143,9 @@ public class ConfigureAlarmActivity extends Activity
 		}
 	}
 	
+	/**
+	 * This method starts the Ringtone Picker on the System
+	 */
 	private void selectRingtone(){
 		Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
 		intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_NOTIFICATION);
@@ -123,6 +155,9 @@ public class ConfigureAlarmActivity extends Activity
 
 	}
 	
+	/**
+	 * Here we write all information in the database
+	 */
 	private void save(){
 		if(currentGroup == null){
 			currentGroup = alarmAdapter.createNewAlarmGroup(
@@ -131,6 +166,8 @@ public class ConfigureAlarmActivity extends Activity
 		} else {
 			currentGroup.setKeyword(editKeyword.getText().toString());
 			currentGroup.setName(editName.getText().toString());
+			//Clear all allowed numbers so we can just add all number from
+			//the list adapter later
 			for(String s : currentGroup.getAllowedNumbers()){
 				currentGroup.removeAllowedNumber(s);
 			}
@@ -140,8 +177,12 @@ public class ConfigureAlarmActivity extends Activity
 		}
 		currentGroup.setRingtoneURI(ringtoneUri);
 		currentGroup.setVibrate(checkBoxVibrate.isChecked());
+		finish();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if(resultCode == Activity.RESULT_OK && requestCode == RINGTONE_REQUEST_CODE){
@@ -154,12 +195,20 @@ public class ConfigureAlarmActivity extends Activity
 		}
 	}
 	
+	/**
+	 * Get a human readable name for a ringtone
+	 * @param uri The Uri of the Ringtone as String representation
+	 * @return the human readable name as String
+	 */
 	private String getToneTitle(String uri){
 		Ringtone myTone = RingtoneManager.getRingtone(this, Uri.parse(uri));
 		myTone.getTitle(this);
 		return myTone.getTitle(this);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onClick(View v) {
 		if(v.getId() == buttonSelectTone.getId()){
@@ -168,7 +217,10 @@ public class ConfigureAlarmActivity extends Activity
 			showDialog(DIALOG_ENTER_SENDER);
 		}
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		if(item.getItemId() == MENU_SAVE){
@@ -181,7 +233,10 @@ public class ConfigureAlarmActivity extends Activity
 		return super.onMenuItemSelected(featureId, item);
 		
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		if(item.getItemId() == CONTEXT_MENU_REMOVE_SENDER){
@@ -193,7 +248,10 @@ public class ConfigureAlarmActivity extends Activity
 		}
 		return super.onContextItemSelected(item);
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onCreateContextMenu(ContextMenu menu, View v,
 			ContextMenuInfo menuInfo) {
@@ -205,12 +263,18 @@ public class ConfigureAlarmActivity extends Activity
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onNewIntent(Intent intent) {
 		this.setIntent(intent);
 		super.onNewIntent(intent);
 	}
-
+	
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch(id){
@@ -221,6 +285,10 @@ public class ConfigureAlarmActivity extends Activity
 		}
 	}
 	
+	/**
+	 * Create a dialog for entering a new allowed sender
+	 * @return a dialog object
+	 */
 	private Dialog createEnterSenderDialog(){
 		Dialog dialog = new Dialog(this);
 		dialog.setTitle(R.string.add_allowed_number);
