@@ -1,5 +1,7 @@
 package de.akuz.android.smsalarm;
 
+import java.util.List;
+
 import de.akuz.android.smsalarm.data.Alarm;
 import de.akuz.android.smsalarm.util.TextUtils;
 import android.app.Activity;
@@ -56,8 +58,10 @@ public class AlarmActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		//TODO: Refresh intent
-		final Alarm[] alarms = 
-			(Alarm[]) callingIntent.getParcelableArrayExtra(Alarm.PARCELABLE_KEYWORD);
+		Bundle extraBundle = callingIntent.getBundleExtra(Alarm.PARCELABLE_KEYWORD);
+		List<Alarm> alarmList = 
+			extraBundle.getParcelableArrayList(Alarm.PARCELABLE_KEYWORD);
+		Alarm[] alarms = alarmList.toArray(new Alarm[]{});
 		alarmListAdapter.clear();
 		
 		for(int i=0;i<alarms.length;i++){

@@ -196,9 +196,12 @@ public class ConfigureAlarmActivity extends Activity
 	 * @return the human readable name as String
 	 */
 	private String getToneTitle(final String uri){
-		final Ringtone myTone = RingtoneManager.getRingtone(this, Uri.parse(uri));
-		myTone.getTitle(this);
-		return myTone.getTitle(this);
+		if(uri!=null){
+			final Ringtone myTone = RingtoneManager.getRingtone(this, Uri.parse(uri));
+			myTone.getTitle(this);
+			return myTone.getTitle(this);
+		}
+		return "";
 	}
 
 	/**

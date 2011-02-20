@@ -16,22 +16,38 @@ import android.telephony.SmsMessage;
 public class SMSReceiver extends BroadcastReceiver {
 	
 	private Context mContext;
+	
+	private AlarmDataAdapter adapter;
 
 	@Override
 	public void onReceive(final Context context, final Intent intent) {
 		this.mContext = context;
 		final Bundle bundle = intent.getExtras();
 		//Get an instance of our AlarmAdapter for later query
-		final AlarmDataAdapter adapter = AlarmDataAdapter.getInstance(context);
+		adapter = AlarmDataAdapter.getInstance(context);
+		adapter.open();
 		
 		//get all message "pdus"
 		final Object messages[] = (Object[]) bundle.get("pdus");
+		Thread parsingThread = new Thread(new Runnable(){
+
+			@Override
+			public void run() {
+				parseSMS(messages);
+				
+			}
+			
+		});
+		parsingThread.start();
 		
+	}
+	
+	private void parseSMS(Object[] messagePdus){
 		final List<Alarm> alarms = new ArrayList<Alarm>();
 		
 		//got through all pdus, build sms from them and check if we have an alarm sms
-		for (int n = 0; n < messages.length; n++) {
-			final SmsMessage temp = SmsMessage.createFromPdu((byte[])messages[n]);
+		for (int n = 0; n < messagePdus.length; n++) {
+			final SmsMessage temp = SmsMessage.createFromPdu((byte[])messagePdus[n]);
 			String body = temp.getDisplayMessageBody();
 			String keyWord = "";
 			if(TextUtils.isNonEmptyString(body)){
@@ -66,7 +82,11 @@ public class SMSReceiver extends BroadcastReceiver {
 	 */
 	private void sendAlarm(final List<Alarm> alarms){
 		final Intent alarmIntent = new Intent(mContext,AlarmActivity.class);
-		alarmIntent.putExtra(Alarm.PARCELABLE_KEYWORD, alarms.toArray(new Alarm[]{}));
+		alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		Bundle extraBundle = new Bundle();
+		extraBundle.putParcelableArrayList(
+				Alarm.PARCELABLE_KEYWORD, new ArrayList<Alarm>(alarms));
+		alarmIntent.putExtra(Alarm.PARCELABLE_KEYWORD, extraBundle);
 		mContext.startActivity(alarmIntent);
 	}
 	

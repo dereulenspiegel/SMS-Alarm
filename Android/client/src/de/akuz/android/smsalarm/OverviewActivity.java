@@ -9,10 +9,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 
-public class OverviewActivity extends Activity implements OnClickListener{
+public class OverviewActivity extends Activity 
+		implements OnClickListener, OnItemClickListener{
 	
 	private ListView alarmGroupListView;
 	private Button addAlarmGroupButton;
@@ -31,6 +34,7 @@ public class OverviewActivity extends Activity implements OnClickListener{
         listAdapter = new AlarmGroupListAdapter(this,
         		android.R.id.text1,new ArrayList<AlarmGroup>());
         alarmGroupListView.setAdapter(listAdapter);
+        alarmGroupListView.setOnItemClickListener(this);
     }
 
 
@@ -64,5 +68,14 @@ public class OverviewActivity extends Activity implements OnClickListener{
 		alarmDataAdapter.closeAllChilds();
 		alarmDataAdapter.close();
 		super.onDestroy();
+	}
+
+
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		long alarmGroupId = listAdapter.getItem(position).getId();
+		Intent i = new Intent(this,ConfigureAlarmActivity.class);
+		i.putExtra(AlarmGroup.EXTRA_ALARM_GROUP_ID, alarmGroupId);
+		startActivity(i);
 	}
 }

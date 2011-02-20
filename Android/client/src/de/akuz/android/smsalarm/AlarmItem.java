@@ -32,7 +32,7 @@ public class AlarmItem extends LinearLayout {
 		this.date = (TextView)view.findViewById(R.id.TextViewDate);
 		this.description = (TextView)view.findViewById(R.id.TextViewDescription);
 		this.message = (TextView)view.findViewById(R.id.TextViewMessage);
-		this.date.setText(DateFormat.getDateFormat(mContext).format(date));
+		this.date.setText(DateFormat.getDateFormat(mContext).format(new Date()));
 		this.message.setText(message);
 		this.description.setText(description);
 	}
