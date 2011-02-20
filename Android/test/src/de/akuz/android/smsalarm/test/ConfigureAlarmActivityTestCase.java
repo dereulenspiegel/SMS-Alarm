@@ -30,4 +30,18 @@ public class ConfigureAlarmActivityTestCase extends
 		getActivity().finish();
 		super.tearDown();
 	}
+	
+	public void testCreatingNewAlarmGroup() throws Exception {
+		String alarmName = "BHP Alarm";
+		String alarmKeyword = "bhp_do1";
+		boolean vibrate = true;
+		String sender = "juh_do";
+		solo.enterText(0, alarmName);
+		solo.enterText(0, alarmKeyword);
+		solo.clickOnCheckBox(0);
+		solo.clickOnButton(1);
+		solo.enterText(0, sender);
+		solo.clickOnButton("Speichern");
+		solo.clickOnMenuItem("Speichern");
+	}
 }
