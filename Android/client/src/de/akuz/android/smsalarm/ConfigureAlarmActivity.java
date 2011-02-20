@@ -78,7 +78,7 @@ public class ConfigureAlarmActivity extends Activity
 		buttonAddSender = (Button)findViewById(R.id.buttonAddSender);
 		allowedSenderListView = (ListView)findViewById(R.id.listView1);
 		
-		allowedSenderAdapter = new ArrayAdapter<String>(this,android.R.id.text1);
+		allowedSenderAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1);
 		
 		allowedSenderListView.setAdapter(allowedSenderAdapter);
 		allowedSenderListView.setOnCreateContextMenuListener(this);
