@@ -42,13 +42,15 @@ public class ConfigureAlarmActivityTestCase extends
 		boolean vibrate = true;
 		String sender = "juh_do";
 		solo.enterText(0, alarmName);
-		solo.enterText(0, alarmKeyword);
+		solo.enterText(1, alarmKeyword);
 		solo.clickOnCheckBox(0);
 		solo.clickOnButton(1);
 		solo.enterText(0, sender);
 		solo.clickOnButton("Speichern");
-		solo.clickOnMenuItem("Speichern");
 		List<ListView> listViews = solo.getCurrentListViews();
 		Assert.assertEquals(sender, listViews.get(0).getItemAtPosition(0));
+		solo.clickOnMenuItem("Speichern");
+		
+		
 	}
 }
