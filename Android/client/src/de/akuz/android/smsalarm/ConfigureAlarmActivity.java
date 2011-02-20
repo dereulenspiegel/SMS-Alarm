@@ -286,7 +286,24 @@ public class ConfigureAlarmActivity extends Activity
 	private Dialog createEnterSenderDialog(){
 		final Dialog dialog = new Dialog(this);
 		dialog.setTitle(R.string.add_allowed_number);
-		//TODO: Set view, access ui elements, add listener etc.
+		dialog.setContentView(R.layout.add_sender_dialog);
+		final EditText editSender = (EditText)dialog.findViewById(R.id.editSender);
+		final Button saveButton = (Button)dialog.findViewById(R.id.buttonSave);
+		final Button cancelButton = (Button)dialog.findViewById(R.id.buttonCancel);
+		OnClickListener dialogOnClickListener = new OnClickListener(){
+
+			@Override
+			public void onClick(View v) {
+				if(v.getId() == saveButton.getId()){
+					allowedSenderAdapter.add(editSender.getText().toString());
+					dialog.dismiss();
+				} else if(v.getId() == cancelButton.getId()){
+					dialog.dismiss();
+				}
+			}
+		};
+		saveButton.setOnClickListener(dialogOnClickListener);
+		cancelButton.setOnClickListener(dialogOnClickListener);
 		return dialog;
 	}
 

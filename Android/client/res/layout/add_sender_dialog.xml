@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_width="fill_parent"
+  android:layout_height="fill_parent">
+    <EditText android:layout_alignParentTop="true" android:layout_height="wrap_content" android:text="EditText" android:layout_width="fill_parent" android:id="@+id/editSender" android:layout_centerHorizontal="true"></EditText>
+    <Button android:layout_below="@+id/editSender" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_alignRight="@+id/editSender" android:id="@+id/buttonCancel" android:text="@string/menu_cancel"></Button>
+    <Button android:layout_below="@+id/editSender" android:layout_height="wrap_content" android:layout_width="wrap_content" android:layout_alignLeft="@+id/editSender" android:id="@+id/buttonSave" android:text="@string/menu_save"></Button>
+</RelativeLayout>
