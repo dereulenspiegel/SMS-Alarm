@@ -7,6 +7,7 @@ import junit.framework.Assert;
 import com.jayway.android.robotium.solo.Solo;
 
 import de.akuz.android.smsalarm.ConfigureAlarmActivity;
+import de.akuz.android.smsalarm.data.AlarmDataAdapter;
 import android.test.ActivityInstrumentationTestCase2;
 import android.widget.ListView;
 
@@ -22,6 +23,11 @@ public class ConfigureAlarmActivityTestCase extends
 	@Override
 	protected void setUp() throws Exception {
 		super.setUp();
+		
+		AlarmDataAdapter alarmAdapter = AlarmDataAdapter.getInstance(getActivity());
+		alarmAdapter.open();
+		alarmAdapter.clear();
+		
 		solo = new Solo(getInstrumentation(),getActivity());
 	}
 
