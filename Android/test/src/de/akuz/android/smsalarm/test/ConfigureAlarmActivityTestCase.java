@@ -1,9 +1,14 @@
 package de.akuz.android.smsalarm.test;
 
+import java.util.List;
+
+import junit.framework.Assert;
+
 import com.jayway.android.robotium.solo.Solo;
 
 import de.akuz.android.smsalarm.ConfigureAlarmActivity;
 import android.test.ActivityInstrumentationTestCase2;
+import android.widget.ListView;
 
 public class ConfigureAlarmActivityTestCase extends
 		ActivityInstrumentationTestCase2<ConfigureAlarmActivity> {
@@ -43,5 +48,7 @@ public class ConfigureAlarmActivityTestCase extends
 		solo.enterText(0, sender);
 		solo.clickOnButton("Speichern");
 		solo.clickOnMenuItem("Speichern");
+		List<ListView> listViews = solo.getCurrentListViews();
+		Assert.assertEquals(sender, listViews.get(0).getItemAtPosition(0));
 	}
 }
