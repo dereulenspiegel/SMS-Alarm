@@ -11,4 +11,7 @@
     <string name="select_alarm_tone">Alarmton auswählen</string>
     <string name="vibrate_for_alarm">Bei Alarm vibrieren</string>
     <string name="add_allowed_number">Erlaubten Absender hinzufügen</string>
+    <string name="menu_save">Speichern</string>
+    <string name="menu_cancel">Abbrechen</string>
+    <string name="remove_allowed_number">Erlaubten absender entfernen</string>
 </resources>
