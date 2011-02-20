@@ -4,6 +4,7 @@ import java.util.List;
 
 import de.akuz.android.smsalarm.data.Alarm;
 import de.akuz.android.smsalarm.util.TextUtils;
+import de.akuz.android.smsalarm.util.Log;
 import android.app.Activity;
 import android.app.KeyguardManager;
 import android.app.KeyguardManager.KeyguardLock;
@@ -45,6 +46,7 @@ public class AlarmActivity extends Activity {
 	@Override
 	protected void onCreate(final Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.debug(TAG, "alarmActivity created");
 		this.setContentView(R.layout.alarm_activity);
 		alarmListView = (ListView)findViewById(R.id.AlarmListView);
 		alarmListAdapter = new AlarmListAdapter(this);
@@ -148,11 +150,23 @@ public class AlarmActivity extends Activity {
 	public boolean onKeyDown(final int keyCode, final KeyEvent event) {
 		//If we are notificating the user of an alarm, it should only be possible to leave
 		//this activity by acknowledging the alarm correctly
-		if(continueNotification && (keyCode == KeyEvent.KEYCODE_BACK 
-				|| keyCode == KeyEvent.KEYCODE_HOME)){
+		if(handleKeyEvent(keyCode)){
 			return true;
 		}
+		Log.debug(TAG, "KeyEvent wasn't Intercepted");
 		return super.onKeyDown(keyCode, event);
+	}
+	
+	private boolean handleKeyEvent(int keyCode){
+		//If we are notificating the user of an alarm, it should only be possible to leave
+		//this activity by acknowledging the alarm correctly
+		Log.debug(TAG,"Got KeyEvent");
+		if(continueNotification && (keyCode == KeyEvent.KEYCODE_BACK 
+				|| keyCode == KeyEvent.KEYCODE_HOME)){
+			Log.debug(TAG, "Intercepting KeyEvent");
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -169,6 +183,15 @@ public class AlarmActivity extends Activity {
 			stopAlarm();
 		}
 		return true;
+	}
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		if(handleKeyEvent(keyCode)){
+			return true;
+		}
+		Log.debug(TAG, "KeyEvent wasn't Intercepted");
+		return onKeyDown(keyCode, event);
 	}
 
 }
