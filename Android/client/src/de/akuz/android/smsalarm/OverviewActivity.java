@@ -25,6 +25,7 @@ public class OverviewActivity extends Activity implements OnClickListener{
         setContentView(R.layout.overview_activity);
         alarmGroupListView = (ListView)findViewById(R.id.AlarmGroupListView);
         addAlarmGroupButton = (Button)findViewById(R.id.AddAlarmGroupButton);
+        addAlarmGroupButton.setOnClickListener(this);
         alarmDataAdapter = AlarmDataAdapter.getInstance(this);
         alarmDataAdapter.open();
         listAdapter = new AlarmGroupListAdapter(this,
