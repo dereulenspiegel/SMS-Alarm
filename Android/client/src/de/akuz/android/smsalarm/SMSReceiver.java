@@ -7,6 +7,7 @@ import de.akuz.android.smsalarm.data.Alarm;
 import de.akuz.android.smsalarm.data.AlarmDataAdapter;
 import de.akuz.android.smsalarm.data.AlarmGroup;
 import de.akuz.android.smsalarm.util.TextUtils;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -29,7 +30,7 @@ public class SMSReceiver extends BroadcastReceiver {
 		
 		//get all message "pdus"
 		final Object messages[] = (Object[]) bundle.get("pdus");
-		Thread parsingThread = new Thread(new Runnable(){
+		/*Thread parsingThread = new Thread(new Runnable(){
 
 			@Override
 			public void run() {
@@ -37,8 +38,12 @@ public class SMSReceiver extends BroadcastReceiver {
 				
 			}
 			
-		});
-		parsingThread.start();
+		});*/
+		//parsingThread.start();
+		parseSMS(messages);
+		//close the adapter and all its child to free resources
+		adapter.closeAllChilds();
+		adapter.close();
 		
 	}
 	
@@ -66,12 +71,11 @@ public class SMSReceiver extends BroadcastReceiver {
 			}
 			
 		}
-		//close the adapter and all its child to free resources
-		adapter.closeAllChilds();
-		adapter.close();
+		
 		if(alarms.size()>0){
-			sendAlarm(alarms);
 			this.setResultData(null);
+			this.setResultCode(1);
+			sendAlarm(alarms);	
 		}
 	}
 	
