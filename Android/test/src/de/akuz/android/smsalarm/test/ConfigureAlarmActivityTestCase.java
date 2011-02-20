@@ -56,7 +56,5 @@ public class ConfigureAlarmActivityTestCase extends
 		List<ListView> listViews = solo.getCurrentListViews();
 		Assert.assertEquals(sender, listViews.get(0).getItemAtPosition(0));
 		solo.clickOnMenuItem("Speichern");
-		
-		
 	}
 }
