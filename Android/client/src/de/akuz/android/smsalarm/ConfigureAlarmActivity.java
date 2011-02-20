@@ -112,14 +112,6 @@ public class ConfigureAlarmActivity extends Activity
 	 * {@inheritDoc}
 	 */
 	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-	
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
 	protected void onResume() {
 		super.onResume();
 		if(this.getIntent().getLongExtra(AlarmGroup.EXTRA_ALARM_GROUP_ID, -1)>-1){
