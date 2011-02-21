@@ -7,7 +7,6 @@ import de.akuz.android.smsalarm.data.Alarm;
 import de.akuz.android.smsalarm.data.AlarmDataAdapter;
 import de.akuz.android.smsalarm.data.AlarmGroup;
 import de.akuz.android.smsalarm.util.TextUtils;
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -47,7 +46,7 @@ public class SMSReceiver extends BroadcastReceiver {
 		
 	}
 	
-	private void parseSMS(Object[] messagePdus){
+	private void parseSMS(final Object[] messagePdus){
 		final List<Alarm> alarms = new ArrayList<Alarm>();
 		
 		//got through all pdus, build sms from them and check if we have an alarm sms
@@ -87,7 +86,7 @@ public class SMSReceiver extends BroadcastReceiver {
 	private void sendAlarm(final List<Alarm> alarms){
 		final Intent alarmIntent = new Intent(mContext,AlarmActivity.class);
 		alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-		Bundle extraBundle = new Bundle();
+		final Bundle extraBundle = new Bundle();
 		extraBundle.putParcelableArrayList(
 				Alarm.PARCELABLE_KEYWORD, new ArrayList<Alarm>(alarms));
 		alarmIntent.putExtra(Alarm.PARCELABLE_KEYWORD, extraBundle);
