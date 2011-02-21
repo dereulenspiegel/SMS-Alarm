@@ -7,3 +7,4 @@ Android/test/bin
 Android/test/gen
 *.apk
 *.ap_
+temp/
