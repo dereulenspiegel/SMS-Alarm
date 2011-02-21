@@ -60,10 +60,11 @@ public class AlarmActivity extends Activity {
 	protected void onResume() {
 		super.onResume();
 		//TODO: Refresh intent
-		Bundle extraBundle = callingIntent.getBundleExtra(Alarm.PARCELABLE_KEYWORD);
-		List<Alarm> alarmList = 
+		final Bundle extraBundle = 
+			callingIntent.getBundleExtra(Alarm.PARCELABLE_KEYWORD);
+		final List<Alarm> alarmList = 
 			extraBundle.getParcelableArrayList(Alarm.PARCELABLE_KEYWORD);
-		Alarm[] alarms = alarmList.toArray(new Alarm[]{});
+		final Alarm[] alarms = alarmList.toArray(new Alarm[]{});
 		alarmListAdapter.clear();
 		
 		for(int i=0;i<alarms.length;i++){
@@ -157,7 +158,7 @@ public class AlarmActivity extends Activity {
 		return super.onKeyDown(keyCode, event);
 	}
 	
-	private boolean handleKeyEvent(int keyCode){
+	private boolean handleKeyEvent(final int keyCode){
 		//If we are notificating the user of an alarm, it should only be possible to leave
 		//this activity by acknowledging the alarm correctly
 		Log.debug(TAG,"Got KeyEvent");
@@ -186,7 +187,7 @@ public class AlarmActivity extends Activity {
 	}
 
 	@Override
-	public boolean onKeyUp(int keyCode, KeyEvent event) {
+	public boolean onKeyUp(final int keyCode, final KeyEvent event) {
 		if(handleKeyEvent(keyCode)){
 			return true;
 		}
