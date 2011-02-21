@@ -72,9 +72,10 @@ public class OverviewActivity extends Activity
 
 
 	@Override
-	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		long alarmGroupId = listAdapter.getItem(position).getId();
-		Intent i = new Intent(this,ConfigureAlarmActivity.class);
+	public void onItemClick(final AdapterView<?> parent, final View view, 
+			final int position, final long id) {
+		final long alarmGroupId = listAdapter.getItem(position).getId();
+		final Intent i = new Intent(this,ConfigureAlarmActivity.class);
 		i.putExtra(AlarmGroup.EXTRA_ALARM_GROUP_ID, alarmGroupId);
 		startActivity(i);
 	}
