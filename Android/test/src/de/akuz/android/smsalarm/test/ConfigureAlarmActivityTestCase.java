@@ -57,4 +57,10 @@ public class ConfigureAlarmActivityTestCase extends
 		Assert.assertEquals(sender, listViews.get(0).getItemAtPosition(0));
 		solo.clickOnMenuItem("Speichern");
 	}
+	
+	public void testDialogOnExit() throws Exception {
+		solo.goBack();
+		solo.waitForText("Wirklich ohne zu speichern beenden?");
+		solo.clickOnButton("Ja");
+	}
 }
