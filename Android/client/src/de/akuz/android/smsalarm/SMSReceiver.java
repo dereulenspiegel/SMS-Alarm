@@ -13,12 +13,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
 
+/**
+ * This class is responsible for analysing every incoming sms and creating alarm
+ * events.
+ * @author Till Klocke
+ *
+ */
 public class SMSReceiver extends BroadcastReceiver {
 	
 	private Context mContext;
 	
 	private AlarmDataAdapter adapter;
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onReceive(final Context context, final Intent intent) {
 		this.mContext = context;
@@ -29,16 +38,6 @@ public class SMSReceiver extends BroadcastReceiver {
 		
 		//get all message "pdus"
 		final Object messages[] = (Object[]) bundle.get("pdus");
-		/*Thread parsingThread = new Thread(new Runnable(){
-
-			@Override
-			public void run() {
-				parseSMS(messages);
-				
-			}
-			
-		});*/
-		//parsingThread.start();
 		parseSMS(messages);
 		//close the adapter and all its child to free resources
 		adapter.closeAllChilds();
@@ -46,6 +45,11 @@ public class SMSReceiver extends BroadcastReceiver {
 		
 	}
 	
+	/**
+	 * This methos creates SmsMessage objects from the pdu object array and checks
+	 * if these sms can be interpreted as alarms.
+	 * @param messagePdus
+	 */
 	private void parseSMS(final Object[] messagePdus){
 		final List<Alarm> alarms = new ArrayList<Alarm>();
 		

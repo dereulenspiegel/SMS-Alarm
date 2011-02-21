@@ -14,6 +14,12 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 
+/**
+ * This Activity is the main activity for this app. It provides a short overview
+ * over all configured AlarmGroups
+ * @author Till Klocke
+ *
+ */
 public class OverviewActivity extends Activity 
 		implements OnClickListener, OnItemClickListener{
 	
@@ -22,6 +28,9 @@ public class OverviewActivity extends Activity
 	private AlarmGroupListAdapter listAdapter;
 	private AlarmDataAdapter alarmDataAdapter;
 	
+	/**
+	 * {@inheritDoc}
+	 */
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +46,9 @@ public class OverviewActivity extends Activity
         alarmGroupListView.setOnItemClickListener(this);
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
 	@Override
 	public void onClick(final View view) {
 		if(view.getId() == addAlarmGroupButton.getId()){
@@ -46,11 +57,17 @@ public class OverviewActivity extends Activity
 		
 	}
 	
+	/**
+	 * This method is called when the add alarm group button is clicked.
+	 * It starts the ConfigureAlarmActivity without any extras.
+	 */
 	private void addAlarmGroupButtonClicked(){
 		startActivity(new Intent(this,ConfigureAlarmActivity.class));
 	}
 
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -60,7 +77,9 @@ public class OverviewActivity extends Activity
 		}
 	}
 
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onDestroy() {
 		alarmGroupListView.setAdapter(null);
@@ -70,7 +89,9 @@ public class OverviewActivity extends Activity
 		super.onDestroy();
 	}
 
-
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void onItemClick(final AdapterView<?> parent, final View view, 
 			final int position, final long id) {
