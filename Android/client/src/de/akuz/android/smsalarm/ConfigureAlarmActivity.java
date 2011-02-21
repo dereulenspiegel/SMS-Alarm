@@ -324,10 +324,10 @@ public class ConfigureAlarmActivity extends Activity
 		final EditText editSender = (EditText)dialog.findViewById(R.id.editSender);
 		final Button saveButton = (Button)dialog.findViewById(R.id.buttonSave);
 		final Button cancelButton = (Button)dialog.findViewById(R.id.buttonCancel);
-		OnClickListener dialogOnClickListener = new OnClickListener(){
+		final OnClickListener dialogOnClickListener = new OnClickListener(){
 
 			@Override
-			public void onClick(View v) {
+			public void onClick(final View v) {
 				if(v.getId() == saveButton.getId()){
 					allowedSenderAdapter.add(editSender.getText().toString());
 					dialog.dismiss();
