@@ -290,6 +290,11 @@ public class ConfigureAlarmActivity extends Activity
 		}
 	}
 	
+	/**
+	 * Creates an AlerDialog which is shown if the user presses the back button
+	 * and therefore could lose all changes
+	 * @return
+	 */
 	private Dialog createExitDialog(){
 		final AlertDialog.Builder builder = new AlertDialog.Builder(this);
 		builder.setMessage(R.string.exit_without_saving)
@@ -341,6 +346,9 @@ public class ConfigureAlarmActivity extends Activity
 		return dialog;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	protected void onPrepareDialog(final int id, final Dialog dialog) {
 		if(id == DIALOG_ENTER_SENDER){
@@ -349,6 +357,9 @@ public class ConfigureAlarmActivity extends Activity
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public boolean onKeyDown(final int keyCode, final KeyEvent event) {
 		if(keyCode == KeyEvent.KEYCODE_BACK){
