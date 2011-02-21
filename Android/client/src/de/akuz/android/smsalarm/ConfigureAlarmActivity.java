@@ -3,7 +3,9 @@ package de.akuz.android.smsalarm;
 import de.akuz.android.smsalarm.data.AlarmDataAdapter;
 import de.akuz.android.smsalarm.data.AlarmGroup;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -11,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -59,6 +62,7 @@ public class ConfigureAlarmActivity extends Activity
 	private final static int MENU_CANCEL = 1;
 	private final static int CONTEXT_MENU_REMOVE_SENDER = 2;
 	private final static int DIALOG_ENTER_SENDER = 3;
+	private final static int DIALOG_EXIT = 4;
 	
 	/**
 	 * {@inheritDoc}
@@ -278,9 +282,35 @@ public class ConfigureAlarmActivity extends Activity
 		switch(id){
 		case DIALOG_ENTER_SENDER:
 			return createEnterSenderDialog();
+			
+		case DIALOG_EXIT:
+			return createExitDialog();
 		default:
 			return null;
 		}
+	}
+	
+	private Dialog createExitDialog(){
+		final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(R.string.exit_without_saving)
+			.setNegativeButton(R.string.no, new DialogInterface.OnClickListener(){
+
+				@Override
+				public void onClick(final DialogInterface dialog, final int which) {
+					dialog.dismiss();
+				}
+			})
+			.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+				
+				@Override
+				public void onClick(final DialogInterface dialog, final int which) {
+					dialog.dismiss();
+					finish();
+				}
+			})
+			.setCancelable(false);
+		
+		return builder.create();
 	}
 	
 	/**
@@ -309,6 +339,23 @@ public class ConfigureAlarmActivity extends Activity
 		saveButton.setOnClickListener(dialogOnClickListener);
 		cancelButton.setOnClickListener(dialogOnClickListener);
 		return dialog;
+	}
+
+	@Override
+	protected void onPrepareDialog(final int id, final Dialog dialog) {
+		if(id == DIALOG_ENTER_SENDER){
+			final EditText editSender = (EditText)dialog.findViewById(R.id.editSender);
+			editSender.setText("");
+		}
+	}
+
+	@Override
+	public boolean onKeyDown(final int keyCode, final KeyEvent event) {
+		if(keyCode == KeyEvent.KEYCODE_BACK){
+			showDialog(DIALOG_EXIT);
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
 	}
 
 }

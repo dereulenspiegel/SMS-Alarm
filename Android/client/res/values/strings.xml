@@ -14,4 +14,7 @@
     <string name="menu_save">Speichern</string>
     <string name="menu_cancel">Abbrechen</string>
     <string name="remove_allowed_number">Erlaubten absender entfernen</string>
+    <string name="exit_without_saving">Wirklich ohne zu speichern beenden?</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
 </resources>
