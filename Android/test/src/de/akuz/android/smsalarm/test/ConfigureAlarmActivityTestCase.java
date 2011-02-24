@@ -22,17 +22,29 @@ public class ConfigureAlarmActivityTestCase extends
 	private Solo solo;
 	private AlarmDataAdapter alarmAdapter;
 	
+	private String groupName = "BHP Alarm";
+	private String groupKeyword = "bhp_do";
+	private String allowedSender = "juh_do";
+	
 	public ConfigureAlarmActivityTestCase(){
 		super("de.akuz.android.smsalarm", ConfigureAlarmActivity.class);
 	}
 
 	@Override
 	protected void setUp() throws Exception {
-		super.setUp();
+		super.setUp();	
 		
-		alarmAdapter = AlarmDataAdapter.getInstance(getActivity());
+		alarmAdapter = 
+			AlarmDataAdapter.getInstance(getInstrumentation().getTargetContext());
 		alarmAdapter.open();
 		alarmAdapter.clear();
+
+		AlarmGroup group = alarmAdapter.createNewAlarmGroup(groupName, groupKeyword);
+		group.setVibrate(true);
+		group.addAllowedNumber(allowedSender);
+		Intent i = new Intent();
+		i.putExtra(AlarmGroup.EXTRA_ALARM_GROUP_ID, group.getId());
+		this.setActivityIntent(i);
 		
 		solo = new Solo(getInstrumentation(),getActivity());
 	}
@@ -50,18 +62,21 @@ public class ConfigureAlarmActivityTestCase extends
 	
 	public void testCreatingNewAlarmGroup() throws Exception {
 		disableKeyguard();
-		String alarmName = "BHP Alarm";
+		String alarmName = "BHP Alarm DO1";
 		String alarmKeyword = "bhp_do1";
 		boolean vibrate = true;
-		String sender = "juh_do";
+		String sender = "juh_do_bhp";
+		solo.clearEditText(0);
 		solo.enterText(0, alarmName);
+		solo.clearEditText(1);
 		solo.enterText(1, alarmKeyword);
 		solo.clickOnCheckBox(0);
 		solo.clickOnButton(1);
+		solo.clearEditText(0);
 		solo.enterText(0, sender);
 		solo.clickOnButton("Speichern");
 		List<ListView> listViews = solo.getCurrentListViews();
-		Assert.assertEquals(sender, listViews.get(0).getItemAtPosition(0));
+		Assert.assertEquals(sender, listViews.get(0).getItemAtPosition(1));
 		solo.clickOnMenuItem("Speichern");
 	}
 	
@@ -77,13 +92,6 @@ public class ConfigureAlarmActivityTestCase extends
 		String groupName = "BHP Alarm";
 		String groupKeyword = "bhp_do";
 		String allowedSender = "juh_do";
-		AlarmGroup group = alarmAdapter.createNewAlarmGroup(groupName, groupKeyword);
-		group.setVibrate(true);
-		group.addAllowedNumber(allowedSender);
-		Intent i = new Intent();
-		i.putExtra(AlarmGroup.EXTRA_ALARM_GROUP_ID, group.getId());
-		this.setActivityIntent(i);
-		getActivity();
 		Assert.assertEquals(groupName,solo.getEditText(0).getText().toString());
 		Assert.assertEquals(groupKeyword,solo.getEditText(1).getText().toString());
 		Assert.assertTrue(solo.isCheckBoxChecked(0));
