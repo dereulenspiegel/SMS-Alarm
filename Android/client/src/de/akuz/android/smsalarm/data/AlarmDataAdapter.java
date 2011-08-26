@@ -205,6 +205,20 @@ public class AlarmDataAdapter {
 		return Collections.unmodifiableList(tempList);
 	}
 	
+	public AlarmGroup getAlarmGroupByKeyword(final String keyword){
+		final Cursor mCursor = db.query(ALARM_TABLE_NAME, 
+				new String[]{ALARM_ID}, 
+				ALARM_KEYWORD+"=?", new String[]{keyword}, null, null, null);
+		final int numberAlarmId = mCursor.getColumnIndex(ALARM_ID);
+		final List<AlarmGroup> tempList = getGroupsFromCursor(mCursor,numberAlarmId);
+		mCursor.close();
+		Log.debug(TAG, "We got "+tempList.size()+" groups from keyword");
+		if(tempList.size() > 0){
+			return tempList.get(0);
+		}
+		return null;
+	}
+	
 	private List<AlarmGroup> getGroupsFromCursor(final Cursor mCursor, 
 			final int idColumn){
 		final int numberAlarmId = idColumn;

@@ -59,8 +59,8 @@ public class SMSReceiver extends BroadcastReceiver {
 			String body = temp.getDisplayMessageBody();
 			String keyWord = "";
 			if(TextUtils.isNonEmptyString(body)){
-				keyWord = body.substring(0, body.indexOf(' '));
-				body = body.substring(body.indexOf(' '));
+				keyWord = TextUtils.getKeyword(body);
+				body = TextUtils.getBody(body);
 			} 
 			
 			final AlarmGroup group = adapter.getAlarmGroupByNumberAndKeyword(

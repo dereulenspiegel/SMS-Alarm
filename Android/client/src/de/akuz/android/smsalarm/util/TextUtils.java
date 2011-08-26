@@ -13,5 +13,13 @@ public class TextUtils {
 		}
 		return false;
 	}
+	
+	public static String getKeyword(String body){
+		return body.substring(0, body.indexOf(' '));
+	}
+	
+	public static String getBody(String body){
+		return body.substring(body.indexOf(' '));
+	}
 
 }

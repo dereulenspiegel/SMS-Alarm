@@ -115,5 +115,13 @@ public class AlarmDataAdapterTestCase extends AndroidTestCase {
 		Assert.assertEquals(1, testList.size());
 		Assert.assertEquals(group.getId(), testList.get(0).getId());
 	}
+	
+	public void testGetAlarmGroupByKeyword() throws Exception {
+		AlarmGroup group = createAlarmGroup(TEST_NAME,
+				TEST_KEYWORD, new String[]{TEST_SENDER});
+		AlarmGroup group2 = testAdapter.getAlarmGroupByKeyword(TEST_KEYWORD);
+		Assert.assertNotNull(group2);
+		Assert.assertEquals(group.getId(), group2.getId());
+	}
 
 }
