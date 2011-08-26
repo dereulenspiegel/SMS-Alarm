@@ -19,7 +19,7 @@ public class TextUtils {
 	}
 	
 	public static String getBody(String body){
-		return body.substring(body.indexOf(' '));
+		return body.substring(body.indexOf(' ')+1);
 	}
 
 }

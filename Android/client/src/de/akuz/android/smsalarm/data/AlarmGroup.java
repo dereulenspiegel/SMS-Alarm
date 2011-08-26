@@ -302,6 +302,13 @@ public class AlarmGroup {
 				null, null, null);
 	}
 	
+	/**
+	 * Verify that the sender of the alarm SMS is an allowed sender. At first we try to match the
+	 * sender against all allowed numbers with String.equals. If this fails we use
+	 * all allowed numbers as regex and try to match against them.
+	 * @param sender
+	 * @return true if we found a match
+	 */
 	public boolean verifySender(String sender){
 		List<String> allowedNumbers = getAllowedNumbers();
 		String tempSender = sender;
@@ -319,6 +326,13 @@ public class AlarmGroup {
 		return hasNumberAsPattern(allowedNumbers, sender);
 	}
 	
+	/**
+	 * This method iterates through all allowed numbers, uses them as regex and matches
+	 * the sender against them.
+	 * @param numbers
+	 * @param sender
+	 * @return true if we found a match
+	 */
 	private boolean hasNumberAsPattern(List<String> numbers, String sender){
 		for(String s :numbers){
 			try{
