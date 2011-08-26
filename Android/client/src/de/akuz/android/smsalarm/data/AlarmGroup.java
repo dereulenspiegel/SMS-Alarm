@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import de.akuz.android.smsalarm.util.Log;
 import de.akuz.android.smsalarm.util.NumberUtils;
@@ -303,24 +304,33 @@ public class AlarmGroup {
 	
 	public boolean verifySender(String sender){
 		List<String> allowedNumbers = getAllowedNumbers();
+		String tempSender = sender;
 		if(NumberUtils.isValidMobileNumber(sender)){
-			String tempSender = NumberUtils.convertNumberToInternationalFormat(sender);
-			for(String s : allowedNumbers){
-				if(s.equals(tempSender)){
-					return true;
-				}
+			Log.info(TAG, "We are veryfying a valid mobile number: "+sender);
+			tempSender = NumberUtils.convertNumberToInternationalFormat(sender);
+		}
+		for(String s : allowedNumbers){
+			if(s.equals(tempSender)){
+				Log.info(TAG, "We found the bare number directly: "+tempSender+" s: "+s);
+				return true;
 			}
 		}
+		Log.debug(TAG, "No number matched directly, trying regex");
 		return hasNumberAsPattern(allowedNumbers, sender);
 	}
 	
 	private boolean hasNumberAsPattern(List<String> numbers, String sender){
 		for(String s :numbers){
-			if(Pattern.matches(s, sender)){
-				return true;
+			try{
+				if(Pattern.matches(s, sender)){
+					Log.debug(TAG, "Number "+sender+" matched with regex: "+s);
+					return true;
+				}
+			}catch(PatternSyntaxException e){
+				Log.warning(TAG, "The pattern "+s+" wasn't a valid regex!",e);
 			}
-			
 		}
+		Log.debug(TAG, "Number "+sender+" didn't matched with any regex");
 		return false;
 	}
 }
