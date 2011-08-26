@@ -63,11 +63,9 @@ public class SMSReceiver extends BroadcastReceiver {
 				body = TextUtils.getBody(body);
 			} 
 			
-			final AlarmGroup group = adapter.getAlarmGroupByNumberAndKeyword(
-					temp.getDisplayOriginatingAddress(), 
-					keyWord);
+			final AlarmGroup group = adapter.getAlarmGroupByKeyword(keyWord);
 			//If the sms matches an alarm group, build an alarm and add it to the list
-			if(group!=null){
+			if(group!=null && group.verifySender(temp.getOriginatingAddress())){
 				alarms.add(new Alarm(temp.getDisplayOriginatingAddress(), 
 						body, group.getName(), group.getLEDColor(), 
 						group.getRingtoneURI(), group.vibrate()));

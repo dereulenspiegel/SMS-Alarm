@@ -4,6 +4,8 @@ package de.akuz.android.smsalarm.data;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import de.akuz.android.smsalarm.util.Log;
 import de.akuz.android.smsalarm.util.NumberUtils;
@@ -299,6 +301,26 @@ public class AlarmGroup {
 				null, null, null);
 	}
 	
+	public boolean verifySender(String sender){
+		List<String> allowedNumbers = getAllowedNumbers();
+		if(NumberUtils.isValidMobileNumber(sender)){
+			String tempSender = NumberUtils.convertNumberToInternationalFormat(sender);
+			for(String s : allowedNumbers){
+				if(s.equals(tempSender)){
+					return true;
+				}
+			}
+		}
+		return hasNumberAsPattern(allowedNumbers, sender);
+	}
 	
-
+	private boolean hasNumberAsPattern(List<String> numbers, String sender){
+		for(String s :numbers){
+			if(Pattern.matches(s, sender)){
+				return true;
+			}
+			
+		}
+		return false;
+	}
 }

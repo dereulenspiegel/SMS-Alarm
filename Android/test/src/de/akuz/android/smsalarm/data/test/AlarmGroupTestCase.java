@@ -98,5 +98,15 @@ public class AlarmGroupTestCase extends AndroidTestCase {
 		Assert.assertTrue(group.getAllowedNumbers().contains(
 				NumberUtils.convertNumberToInternationalFormat(nationalMobile)));
 	}
+	
+	public void testRegexAsAllowedNumber() throws Exception {
+		String regex = "017.?179179";
+		String number = "0179179179";
+		String falseNumber = "0169179179";
+		
+		group.addAllowedNumber(regex);
+		Assert.assertTrue(group.verifySender(number));
+		Assert.assertFalse(group.verifySender(falseNumber));
+	}
 
 }
