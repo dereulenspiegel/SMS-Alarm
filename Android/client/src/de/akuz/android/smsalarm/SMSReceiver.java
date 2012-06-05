@@ -33,14 +33,13 @@ public class SMSReceiver extends BroadcastReceiver {
 		this.mContext = context;
 		final Bundle bundle = intent.getExtras();
 		//Get an instance of our AlarmAdapter for later query
-		adapter = AlarmDataAdapter.getInstance(context);
+		adapter = new AlarmDataAdapter(context);
 		adapter.open();
 		
 		//get all message "pdus"
 		final Object messages[] = (Object[]) bundle.get("pdus");
 		parseSMS(messages);
 		//close the adapter and all its child to free resources
-		adapter.closeAllChilds();
 		adapter.close();
 		
 	}
@@ -67,7 +66,7 @@ public class SMSReceiver extends BroadcastReceiver {
 			//If the sms matches an alarm group, build an alarm and add it to the list
 			if(group!=null && group.verifySender(temp.getOriginatingAddress())){
 				alarms.add(new Alarm(temp.getDisplayOriginatingAddress(), 
-						body, group.getName(), group.getLEDColor(), 
+						body, group.getId(), group.getLEDColor(), 
 						group.getRingtoneURI(), group.vibrate()));
 			}
 			
@@ -86,12 +85,13 @@ public class SMSReceiver extends BroadcastReceiver {
 	 * @param alarms
 	 */
 	private void sendAlarm(final List<Alarm> alarms){
+		this.abortBroadcast();
 		final Intent alarmIntent = new Intent(mContext,AlarmActivity.class);
 		alarmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		final Bundle extraBundle = new Bundle();
 		extraBundle.putParcelableArrayList(
-				Alarm.PARCELABLE_KEYWORD, new ArrayList<Alarm>(alarms));
-		alarmIntent.putExtra(Alarm.PARCELABLE_KEYWORD, extraBundle);
+				Alarm.EXTRA_ALARM_DATA, new ArrayList<Alarm>(alarms));
+		alarmIntent.putExtra(Alarm.EXTRA_ALARM_DATA, extraBundle);
 		mContext.startActivity(alarmIntent);
 	}
 	

@@ -11,7 +11,7 @@ import android.os.Parcelable;
  */
 public class Alarm implements Parcelable {
 	
-	public final static String PARCELABLE_KEYWORD="AlarmObjects";
+	public final static String EXTRA_ALARM_DATA="AlarmObjects";
 	
 	/**
 	 * The sender from where the alarm originated
@@ -21,10 +21,6 @@ public class Alarm implements Parcelable {
 	 * The message of the alarm
 	 */
 	private String message;
-	/**
-	 * A description of the alarm i.e. the name of the AlarmGroup
-	 */
-	private String description;
 	/**
 	 * The color in which the led should flash
 	 */
@@ -37,6 +33,8 @@ public class Alarm implements Parcelable {
 	 * The the device should vibrate
 	 */
 	private boolean vibrate;
+	
+	private long alarmGroupId;
 	
 	/**
 	 * A needed field for Parcelables
@@ -80,11 +78,11 @@ public class Alarm implements Parcelable {
 	 * @param vibrate
 	 */
 	public Alarm(final String sender, final String message, 
-			final String description, final int ledColor, 
+			final long alarmGroupId, final int ledColor, 
 			final String ringtoneUri, final boolean vibrate){
 		this.sender = sender;
 		this.message = message;
-		this.description = description;
+		this.alarmGroupId = alarmGroupId;
 		this.ledColor = ledColor;
 		this.ringtoneUri = ringtoneUri;
 		this.vibrate = vibrate;
@@ -97,7 +95,7 @@ public class Alarm implements Parcelable {
 	 * @param message
 	 */
 	public Alarm(final AlarmGroup group, final String sender, final String message){
-		this(sender, message,group.getName(),group.getLEDColor(),
+		this(sender, message,group.getId(),group.getLEDColor(),
 				group.getRingtoneURI(), group.vibrate());
 	}
 
@@ -116,15 +114,6 @@ public class Alarm implements Parcelable {
 	public String getMessage() {
 		return message;
 	}
-	
-	/**
-	 * Returns the Description (name) of the AlarmGroup through which this Alarm
-	 * was generated
-	 * @return
-	 */
-	public String getDescription() {
-		return description;
-	}
 
 	/**
 	 * {@inheritDoc}
@@ -141,7 +130,7 @@ public class Alarm implements Parcelable {
 	private void readFromParcel(final Parcel in){
 		this.sender = in.readString();
 		this.message = in.readString();
-		this.description = in.readString();
+		this.alarmGroupId = in.readLong();
 		this.ledColor = in.readInt();
 		this.ringtoneUri = in.readString();
 		this.vibrate = in.readInt()==1;
@@ -154,7 +143,7 @@ public class Alarm implements Parcelable {
 	public void writeToParcel(final Parcel parcel, final int flags) {
 		parcel.writeString(this.sender);
 		parcel.writeString(this.message);
-		parcel.writeString(this.description);
+		parcel.writeLong(alarmGroupId);
 		parcel.writeInt(ledColor);
 		parcel.writeString(ringtoneUri);
 		parcel.writeInt(vibrate?1:0);
@@ -182,6 +171,14 @@ public class Alarm implements Parcelable {
 	 */
 	public boolean isVibrate() {
 		return vibrate;
+	}
+
+	public long getAlarmGroupId() {
+		return alarmGroupId;
+	}
+
+	public void setAlarmGroupId(long alarmGroupId) {
+		this.alarmGroupId = alarmGroupId;
 	}
 
 }

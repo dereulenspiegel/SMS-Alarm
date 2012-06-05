@@ -1,103 +1,73 @@
 package de.akuz.android.smsalarm;
 
-import java.util.ArrayList;
-
-import de.akuz.android.smsalarm.data.AlarmDataAdapter;
-import de.akuz.android.smsalarm.data.AlarmGroup;
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
-import android.widget.ListView;
+
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuItem;
+
+import de.akuz.android.smsalarm.fragments.AlarmGroupListFragment;
+import de.akuz.android.smsalarm.fragments.AlarmGroupListFragment.GroupSelectedListener;
 
 /**
  * This Activity is the main activity for this app. It provides a short overview
  * over all configured AlarmGroups
+ * 
  * @author Till Klocke
- *
+ * 
  */
-public class OverviewActivity extends Activity 
-		implements OnClickListener, OnItemClickListener{
-	
-	private ListView alarmGroupListView;
-	private Button addAlarmGroupButton;
-	private AlarmGroupListAdapter listAdapter;
-	private AlarmDataAdapter alarmDataAdapter;
-	
+public class OverviewActivity extends BaseActivity implements
+		GroupSelectedListener {
+
+	private final static int MENU_ADD_ALARM_GROUP = 11;
+
+	private AlarmGroupListFragment listFragment;
+
 	/**
 	 * {@inheritDoc}
 	 */
-    @Override
-    public void onCreate(final Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.overview_activity);
-        alarmGroupListView = (ListView)findViewById(R.id.AlarmGroupListView);
-        addAlarmGroupButton = (Button)findViewById(R.id.AddAlarmGroupButton);
-        addAlarmGroupButton.setOnClickListener(this);
-        alarmDataAdapter = AlarmDataAdapter.getInstance(this);
-        alarmDataAdapter.open();
-        listAdapter = new AlarmGroupListAdapter(this,
-        		android.R.id.text1,new ArrayList<AlarmGroup>());
-        alarmGroupListView.setAdapter(listAdapter);
-        alarmGroupListView.setOnItemClickListener(this);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
 	@Override
-	public void onClick(final View view) {
-		if(view.getId() == addAlarmGroupButton.getId()){
+	public void onCreate(final Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.overview_activity);
+		setTitle(R.string.alarm_groups);
+		listFragment = (AlarmGroupListFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.alarmGroupListFragment);
+		listFragment.setListener(this);
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		MenuItem item = menu.add(Menu.NONE, MENU_ADD_ALARM_GROUP, Menu.NONE,
+				R.string.add_alarm_group);
+		item.setIcon(android.R.drawable.ic_menu_add);
+		item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == MENU_ADD_ALARM_GROUP) {
 			addAlarmGroupButtonClicked();
+			return true;
 		}
-		
-	}
-	
-	/**
-	 * This method is called when the add alarm group button is clicked.
-	 * It starts the ConfigureAlarmActivity without any extras.
-	 */
-	private void addAlarmGroupButtonClicked(){
-		startActivity(new Intent(this,ConfigureAlarmActivity.class));
+		return super.onOptionsItemSelected(item);
 	}
 
 	/**
-	 * {@inheritDoc}
+	 * This method is called when the add alarm group button is clicked. It
+	 * starts the ConfigureAlarmActivity without any extras.
 	 */
-	@Override
-	protected void onResume() {
-		super.onResume();
-		listAdapter.clear();
-		for(AlarmGroup g : alarmDataAdapter.getAllAlarmGroups()){
-			listAdapter.add(g);
-		}
+	private void addAlarmGroupButtonClicked() {
+		startActivity(new Intent(this, AlarmGroupDetailActivity.class));
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
 	@Override
-	protected void onDestroy() {
-		alarmGroupListView.setAdapter(null);
-		listAdapter.clear();
-		alarmDataAdapter.closeAllChilds();
-		alarmDataAdapter.close();
-		super.onDestroy();
-	}
-
-	/**
-	 * {@inheritDoc}
-	 */
-	@Override
-	public void onItemClick(final AdapterView<?> parent, final View view, 
-			final int position, final long id) {
-		final long alarmGroupId = listAdapter.getItem(position).getId();
-		final Intent i = new Intent(this,ConfigureAlarmActivity.class);
-		i.putExtra(AlarmGroup.EXTRA_ALARM_GROUP_ID, alarmGroupId);
+	public void alarmGroupSelected(long groupId) {
+		Intent i = new Intent(this, AlarmGroupDetailActivity.class);
+		i.putExtra(AlarmGroupDetailActivity.EXTRA_ALARM_GROUP_ID, groupId);
 		startActivity(i);
+
 	}
 }

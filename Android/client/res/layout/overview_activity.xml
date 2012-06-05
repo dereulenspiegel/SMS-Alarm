@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
     <RelativeLayout android:id="@+id/relativeLayout1" android:layout_width="fill_parent" android:layout_height="fill_parent" xmlns:android="http://schemas.android.com/apk/res/android">
-        <ListView android:layout_width="fill_parent" android:layout_height="wrap_content" android:layout_alignParentLeft="true" android:id="@+id/AlarmGroupListView"></ListView>
-        <Button android:layout_height="wrap_content" android:text="@string/add_alarm_group" android:layout_width="wrap_content" android:id="@+id/AddAlarmGroupButton" android:layout_alignParentLeft="true" android:layout_alignParentBottom="true"></Button>
+
+        <fragment
+            android:id="@+id/alarmGroupListFragment"
+            android:name="de.akuz.android.smsalarm.fragments.AlarmGroupListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" >
+
+            <!-- Preview: layout=@layout/alarm_group_list_fragment -->
+        </fragment>
+
     </RelativeLayout>
