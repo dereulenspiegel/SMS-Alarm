@@ -25,4 +25,7 @@
     <string name="message_alarm_group_saved">Alarmgruppe gespeichert</string>
     <string name="message_alarm_group_deleted">Alarmgruppe gelöscht</string>
     <string name="message_sender_deleted">Absender gelöscht</string>
+    <string name="response_number">Antwortnummer</string>
+    <string name="answer_to_sender">An Absender antworten</string>
+    <string name="add_answer">Antwort hinzufügen</string>
 </resources>
