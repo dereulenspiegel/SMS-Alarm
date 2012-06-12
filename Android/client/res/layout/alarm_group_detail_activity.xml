@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <fragment
+        android:id="@+id/alarmGroupDetailFragment"
+        android:name="de.akuz.android.smsalarm.fragments.AlarmGroupDetailFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <!-- Preview: layout=@layout/alarm_group_detail_fragment -->
+    </fragment>
+
+    <fragment
+        android:id="@+id/manageAllowedNumberFragment"
+        android:name="de.akuz.android.smsalarm.fragments.ManageAllowedNumbersFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <!-- Preview: layout=@layout/manage_allowed_numbers -->
+    </fragment>
+
+</LinearLayout>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <ListView
+        android:id="@+id/allowedNumberList"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:layout_above="@+id/addNumberTextView">
+
+    </ListView>
+
+    <EditText
+        android:id="@+id/addNumberTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@+id/addNumberButton" >
+
+        <requestFocus />
+    </EditText>
+
+    <Button
+        android:id="@+id/addNumberButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:text="@string/add" />
+
+</RelativeLayout>

@@ -8,6 +8,7 @@
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"></uses-permission>
     <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="15"></uses-sdk>
+    <uses-feature android:required="true" android:name="android.hardware.telephony"/>
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:theme="@style/SMSAlarm">
 		<receiver android:name="de.akuz.android.smsalarm.SMSReceiver" android:enabled="true">
 			<intent-filter android:priority="1000">
