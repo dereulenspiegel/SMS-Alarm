@@ -61,7 +61,7 @@ public class AlarmActivity extends BaseActivity {
 
 		for (int i = 0; i < alarms.length; i++) {
 			// Set the notification settings. We use the first available
-			// settings to+
+			// settings to
 			// notify the user
 			if (!TextUtils.isNonEmptyString(ringtoneUri)
 					&& TextUtils.isNonEmptyString(alarms[i].getRingtoneUri())) {

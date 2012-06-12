@@ -22,8 +22,43 @@ public class AlarmDataAdapter {
 
 	private final static String TAG = "AlarmDataAdapter";
 
-	private final static String DB_NAME = "alarms.sql";
+	private final static String DB_NAME = "alarmGroups.sql";
 	private final static int DB_VERSION = 3;
+
+	/**
+	 * Table for response configurations
+	 */
+	public final static String RESPONSE_TABLE_NAME = "response_config";
+	public final static String RESPONSE_ID = "_id";
+	public final static String RESPONSE_ALARM_ID = "alarm_group_id";
+	public final static String RESPONSE_TYPE = "response_type";
+	public final static String RESPONSE_NUMBER = "response_number";
+	public final static String RESPONSE_TO_RECEIVED_NUMBER = "response_to_received_number";
+	public final static String RESPONSE_CREATE_STATEMENT = "create table "
+			+ RESPONSE_TABLE_NAME + " (" + RESPONSE_ID
+			+ " integer primary key autoincrement, " + RESPONSE_NUMBER
+			+ " text, " + RESPONSE_TO_RECEIVED_NUMBER + " integer not null, "
+			+ RESPONSE_ALARM_ID + " integer not null, " + RESPONSE_TYPE
+			+ " text not null);";
+
+	/**
+	 * Table for response choices
+	 */
+	public final static String RESPONSE_CHOICE_TABLE_NAME = "response_choices";
+	public final static String RESPONSE_CHOICE_ID = "_id";
+	public final static String RESPONSE_CHOICE_MEANING = "choice_meaning";
+	public final static String RESPONSE_CHOICE_PREFIX = "message_prefix";
+	public final static String RESPONSE_CHOICE_CONFIG_ID = "config_id";
+	public final static String RESPONCE_CHOICE_CREATE_STATEMENT = "create table "
+			+ RESPONSE_CHOICE_TABLE_NAME
+			+ " ( "
+			+ RESPONSE_CHOICE_ID
+			+ " integer primary key autoincrement, "
+			+ RESPONSE_CHOICE_CONFIG_ID
+			+ " integer not null, "
+			+ RESPONSE_CHOICE_MEANING
+			+ " text not null, "
+			+ RESPONSE_CHOICE_PREFIX + " text not null);";
 
 	/**
 	 * Table and column names for the table which stores the alarmgroups
@@ -75,6 +110,8 @@ public class AlarmDataAdapter {
 					+ ALARM_CREATE_STATEMENT);
 			db.execSQL(ALARM_CREATE_STATEMENT);
 			db.execSQL(NUMBER_CREATE_STATEMENT);
+			db.execSQL(RESPONSE_CREATE_STATEMENT);
+			db.execSQL(RESPONCE_CHOICE_CREATE_STATEMENT);
 			Log.d(TAG, "Database created");
 		}
 
@@ -88,6 +125,8 @@ public class AlarmDataAdapter {
 			Log.d(TAG, "Updating database, deleting old content...");
 			db.execSQL("DROP TABLE IF EXISTS " + ALARM_TABLE_NAME);
 			db.execSQL("DROP TABLE IF EXISTS " + NUMBER_TABLE_NAME);
+			db.execSQL("DROP TABLE IF EXISTS " + RESPONSE_CHOICE_TABLE_NAME);
+			db.execSQL("DROP TABLE IF EXISTS " + RESPONSE_TABLE_NAME);
 			onCreate(db);
 		}
 	}
@@ -149,6 +188,18 @@ public class AlarmDataAdapter {
 		return retVal;
 	}
 
+	private AlarmResponseConfiguration getAlarmResponseConfigurationByAlarmGroupId(
+			final long id) {
+		AlarmResponseConfiguration config = null;
+		final Cursor mCursor = db.query(RESPONSE_TABLE_NAME, null,
+				RESPONSE_ALARM_ID + "=?", new String[] { String.valueOf(id) },
+				null, null, null);
+		if (mCursor.moveToFirst()) {
+			config = bindCursorToAlarmResponseConfiguration(mCursor);
+		}
+		return config;
+	}
+
 	private List<String> getAllowedNumbersForGroupId(long id) {
 		final Cursor mCursor = db.query(NUMBER_TABLE_NAME, new String[] {
 				NUMBER_ALARM_ID, NUMBER_NUMBER_STRING, NUMBER_ID },
@@ -184,7 +235,43 @@ public class AlarmDataAdapter {
 		retVal.setRingtoneURI(mCursor.getString(ringtoneUriId));
 		retVal.setVibrate(mCursor.getInt(vibrateId) > 0);
 		retVal.setAllowedNumbers(getAllowedNumbersForGroupId(retVal.getId()));
+		retVal.setResponseConfiguration(getAlarmResponseConfigurationByAlarmGroupId(retVal
+				.getId()));
 		return retVal;
+	}
+
+	private AlarmResponseConfiguration bindCursorToAlarmResponseConfiguration(
+			Cursor mCursor) {
+		AlarmResponseConfiguration config = new AlarmResponseConfiguration();
+
+		int idId = mCursor.getColumnIndex(RESPONSE_ID);
+		int numberId = mCursor.getColumnIndex(RESPONSE_NUMBER);
+		int toReceivedId = mCursor.getColumnIndex(RESPONSE_TO_RECEIVED_NUMBER);
+		int typeId = mCursor.getColumnIndex(RESPONSE_TYPE);
+		int parentIdId = mCursor.getColumnIndex(RESPONSE_ALARM_ID);
+
+		config.setId(mCursor.getLong(idId));
+		config.setRespondtoReceivedNumber(mCursor.getInt(toReceivedId) > 0);
+		config.setResponseNumber(mCursor.getString(numberId));
+		config.setResponseType(AlarmResponseTypes.valueOf(mCursor
+				.getString(typeId)));
+		config.setParentId(mCursor.getLong(parentIdId));
+
+		return config;
+	}
+
+	private ContentValues bindAlarmResponseConfigurationToContentValues(
+			AlarmResponseConfiguration config) {
+		ContentValues values = new ContentValues();
+
+		values.put(RESPONSE_ID, config.getId());
+		values.put(RESPONSE_NUMBER, config.getResponseNumber());
+		values.put(RESPONSE_TO_RECEIVED_NUMBER,
+				config.isRespondtoReceivedNumber() ? 1 : 0);
+		values.put(RESPONSE_TYPE, config.getResponseType().toString());
+		values.put(RESPONSE_ALARM_ID, config.getParentId());
+
+		return values;
 	}
 
 	/**
@@ -256,15 +343,50 @@ public class AlarmDataAdapter {
 		if (group.getId() < 0) {
 			AlarmGroup newGroup = createNewAlarmGroup(group);
 			updateAllowedNumbers(newGroup);
+			insertAlarmResponseConfiguration(newGroup);
 			return newGroup;
 		} else {
 			ContentValues values = bindAlarmGroupToContentValues(group);
 			db.update(ALARM_TABLE_NAME, values, ALARM_ID + "=?",
 					new String[] { String.valueOf(group.getId()) });
 			updateAllowedNumbers(group);
+			updateAlarmResponseConfiguration(group);
 			return group;
 		}
 
+	}
+
+	private void updateAvailableResponses(AlarmResponseConfiguration config) {
+		List<AlarmResponse> responses = config.getAvailableResponses();
+
+		db.delete(RESPONSE_CHOICE_TABLE_NAME, RESPONSE_CHOICE_CONFIG_ID + "=?",
+				new String[] { String.valueOf(config.getId()) });
+		if (responses != null) {
+			for (AlarmResponse a : responses) {
+				ContentValues values = new ContentValues();
+				values.put(RESPONSE_CHOICE_CONFIG_ID, config.getId());
+				values.put(RESPONSE_CHOICE_MEANING, a.getMeaning());
+				values.put(RESPONSE_CHOICE_PREFIX, a.getMessagePrefix());
+				db.insert(RESPONSE_CHOICE_TABLE_NAME, null, values);
+			}
+		}
+	}
+
+	private void insertAlarmResponseConfiguration(AlarmGroup group) {
+		AlarmResponseConfiguration config = group.getResponseConfiguration();
+		config.setParentId(group.getId());
+		ContentValues values = bindAlarmResponseConfigurationToContentValues(config);
+		long id = db.insert(RESPONSE_TABLE_NAME, null, values);
+		config.setId(id);
+		updateAvailableResponses(config);
+	}
+
+	private void updateAlarmResponseConfiguration(AlarmGroup group) {
+		ContentValues values = bindAlarmResponseConfigurationToContentValues(group
+				.getResponseConfiguration());
+		db.update(RESPONSE_TABLE_NAME, values, RESPONSE_ALARM_ID + "=?",
+				new String[] { String.valueOf(group.getId()) });
+		updateAvailableResponses(group.getResponseConfiguration());
 	}
 
 	private ContentValues bindAlarmGroupToContentValues(AlarmGroup group) {

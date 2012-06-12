@@ -20,7 +20,7 @@ public class AlarmGroup {
 	private final static String TAG = "AlarmGroup";
 
 	public final static String EXTRA_ALARM_GROUP_ID = "de.akuz.android.smsalarm.alarmgroupid";
-	
+
 	private final static String EMPTY = "";
 
 	private long id;
@@ -31,6 +31,8 @@ public class AlarmGroup {
 	private String ringtoneUri;
 	private boolean vibrate;
 	private String name;
+	private AlarmResponseConfiguration responseConfiguration;
+	private boolean canRespond;
 
 	public AlarmGroup() {
 		this.id = -1;
@@ -230,6 +232,22 @@ public class AlarmGroup {
 	public void setId(long id) {
 		this.id = id;
 	}
-	
+
+	public AlarmResponseConfiguration getResponseConfiguration() {
+		return responseConfiguration;
+	}
+
+	public void setResponseConfiguration(
+			AlarmResponseConfiguration responseConfiguration) {
+		this.responseConfiguration = responseConfiguration;
+	}
+
+	public boolean isCanRespond() {
+		return canRespond;
+	}
+
+	public void setCanRespond(boolean canRespond) {
+		this.canRespond = canRespond;
+	}
 
 }
